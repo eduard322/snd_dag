@@ -26,7 +26,7 @@ gevgen_fnal -f "$FLUX,,-$NEUTRINO,$NEUTRINO" \
     -L "cm" \
     -D "g_cm3" \
     -n $NEVENTS \
-    -o $OUTPUTFILE \
+    -o ${OUTPUTFILE%%.0.ghep.root} \
     --tune $TUNE \
     --cross-sections $XSECTION \
     --message-thresholds $GENIE/config/Messenger_laconic.xml \
