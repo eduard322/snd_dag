@@ -1,12 +1,12 @@
 executable            = generate_input_file.sh
-NEVENTSPERJOB = $(NEVENTS) / $(NJOBS)
+NEVENTSPERJOB = $INT(NEVENTS) / $INT(NJOBS)
 arguments             = $(ProcId) $INT(NEVENTSPERJOB)
 output                = logs/generate_input_file.$(ClusterId).$(ProcId).out
 error                 = logs/generate_input_file.$(ClusterId).$(ProcId).err
 log                   = logs/generate_input_file.$(ClusterId).log
-getenv = True
+getenv = False
 notification = Never
 RequestCpus = 1
 requirements = (OpSysAndVer =?= "AlmaLinux9")
-+JobFlavour             ="weekend"
++JobFlavour = "testmatch"
 queue $(NJOBS)

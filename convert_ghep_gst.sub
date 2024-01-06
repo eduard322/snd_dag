@@ -4,9 +4,9 @@ arguments             = $(ProcId) sndlhc_+volAdvTarget_$INT(NEVENTSPERJOB)_ADVSN
 output                = logs/convert_ghep_gst.$(ClusterId).$(ProcId).out
 error                 = logs/convert_ghep_gst.$(ClusterId).$(ProcId).err
 log                   = logs/convert_ghep_gst.$(ClusterId).log
-getenv = True
+getenv = False
 notification = Never
 RequestCpus = 1
 requirements = (OpSysAndVer =?= "AlmaLinux9")
-+JobFlavour             ="microcentury"
++JobFlavour             ="longlunch"
 queue $(NJOBS)

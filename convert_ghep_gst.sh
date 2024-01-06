@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
-set -o errexit -o pipefail -o noclobber -o nounset
+set -o errexit -o pipefail -o noclobber
+
+# Set up SND environment
+ADVSNDBUILD_DIR=/afs/cern.ch/user/o/olantwin/SND
+source /cvmfs/sndlhc.cern.ch/SNDLHC-2023/Aug30/setUp.sh
+source $ADVSNDBUILD_DIR/snd_setup.sh
+
+set -o nounset
 
 ProcId=$1
 LSB_JOBINDEX=$((ProcId+1))

@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
-set -o errexit -o pipefail -o noclobber -o nounset
+set -o errexit -o pipefail -o noclobber
+
+# Set up SND environment
+ADVSNDBUILD_DIR=/afs/cern.ch/user/o/olantwin/SND
+source /cvmfs/sndlhc.cern.ch/SNDLHC-2023/Aug30/setUp.sh
+source $ADVSNDBUILD_DIR/snd_setup.sh
+
+set -o nounset
 
 GEOFILE="/afs/cern.ch/user/o/olantwin/SND/geofile.050124.gdml"
 MPL="/afs/cern.ch/user/o/olantwin/SND/mpl.xml"
@@ -18,6 +25,8 @@ SEED=$LSB_JOBINDEX
 
 EOSSERVER=root://eosuser.cern.ch/
 OUTPUTDIR=/eos/user/o/olantwin/advsnd/2024/01/numu/$LSB_JOBINDEX
+
+set -x
 
 gevgen_fnal -f "$FLUX,,-$NEUTRINO,$NEUTRINO" \
     -g $GEOFILE \
