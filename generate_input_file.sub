@@ -1,0 +1,11 @@
+executable            = generate_input_file.sh
+arguments             = $(ClusterID) $(ProcId) 10
+output                = logs/generate_input_file.$(ClusterId).$(ProcId).out
+error                 = logs/generate_input_file.$(ClusterId).$(ProcId).err
+log                   = logs/generate_input_file.$(ClusterId).log
+getenv = True
+notification = Never
+RequestCpus = 1
+requirements = (OpSysAndVer =?= "AlmaLinux9")
++JobFlavour             ="microcentury"
+queue 10
