@@ -1,0 +1,14 @@
+executable            = transport_neutrinos.sh
+N = 1000000
+NJOBS = 1000
+NEVENTSPERJOB = $(NEVENTS) / $(NJOBS)
+arguments             = $(ProcId) sndlhc_+volAdvTarget_$INT(NEVENTSPERJOB)_ADVSNDG18_02a_01_000.0.gst.root
+output                = logs/transport_neutrinos.$(ClusterId).$(ProcId).out
+error                 = logs/transport_neutrinos.$(ClusterId).$(ProcId).err
+log                   = logs/transport_neutrinos.$(ClusterId).log
+getenv = False
+notification = Never
+RequestCpus = 1
+requirements = (OpSysAndVer =?= "AlmaLinux9")
++JobFlavour             ="testmatch"
+queue $(NJOBS)
