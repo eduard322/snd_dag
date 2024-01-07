@@ -21,6 +21,6 @@ set -x
 
 xrdcp $EOSSERVER/$OUTPUTDIR/$INPUT ./$INPUT
 
-python $SNDSW_ROOT/shipLHC/run_simSND.py --Genie 4 -f $INPUTFILE --AdvSND
+python $SNDSW_ROOT/shipLHC/run_simSND.py --Genie 4 -f $INPUT --AdvSND
 
 xrdcp $OUTPUTFILE $EOSSERVER/$OUTPUTDIR/$OUTPUTFILE
