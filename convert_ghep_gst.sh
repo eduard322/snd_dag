@@ -16,6 +16,13 @@ EOSSERVER=root://eosuser.cern.ch/
 OUTPUTDIR=/eos/user/o/olantwin/advsnd/2024/01/numu/$LSB_JOBINDEX
 OUTPUT=$(basename $INPUT .ghep.root).gst.root
 
+set -x
+
+if xrdfs $EOSSERVER stat $OUTPUTDIR/$OUTPUT; then
+	echo "Target exists, nothing to do."
+	exit 0
+fi
+
 xrdcp $EOSSERVER/$OUTPUTDIR/$INPUT ./$INPUT
 
 gntpc -i $INPUT -f gst -o $OUTPUT -c

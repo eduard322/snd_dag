@@ -28,6 +28,11 @@ OUTPUTDIR=/eos/user/o/olantwin/advsnd/2024/01/numu/$LSB_JOBINDEX
 
 set -x
 
+if xrdfs $EOSSERVER stat $OUTPUTDIR/$OUTPUTFILE; then
+	echo "Target exists, nothing to do."
+	exit 0
+fi
+
 gevgen_fnal -f "$FLUX,,-$NEUTRINO,$NEUTRINO" \
     -g $GEOFILE \
     -t $TOPVOLUME \

@@ -1,9 +1,15 @@
 VARS ALL_NODES NEVENTS="1000000" NJOBS="1000"
 Job generate_input_file generate_input_file.sub
 Job convert_ghep_gst convert_ghep_gst.sub
+Job transport_neutrinos transport_neutrinos.sub
 DOT dag.dot UPDATE
 
 Parent generate_input_file Child convert_ghep_gst
+Parent convert_ghep_gst Child transport_neutrinos
+
+SCRIPT PRE ALL_NODES check_files.sh $JOB
+
+PRE_SKIP ALL_NODES 2
 
 SAVE_POINT_FILE generate_input_file
 SAVE_POINT_FILE convert_ghep_gst
