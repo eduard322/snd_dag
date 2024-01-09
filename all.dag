@@ -11,5 +11,5 @@ SCRIPT PRE ALL_NODES check_files.sh $JOB
 
 PRE_SKIP ALL_NODES 2
 
-SAVE_POINT_FILE generate_input_file
-SAVE_POINT_FILE convert_ghep_gst
+# SAVE_POINT_FILE generate_input_file
+# SAVE_POINT_FILE convert_ghep_gst
