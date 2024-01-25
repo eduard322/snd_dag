@@ -1,0 +1,12 @@
+executable            = digitise.sh
+NJOBS = 1000
+arguments             = $(ProcId)
+output                = logs/digitise.$(ClusterId).$(ProcId).out
+error                 = logs/digitise.$(ClusterId).$(ProcId).err
+log                   = logs/digitise.$(ClusterId).log
+getenv = False
+notification = Never
+RequestCpus = 1
+requirements = (OpSysAndVer =?= "AlmaLinux9")
++JobFlavour             ="longlunch"
+queue $(NJOBS)
