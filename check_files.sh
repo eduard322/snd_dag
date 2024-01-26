@@ -16,6 +16,7 @@ case "${JOB}" in
 	convert_ghep_gst) OUTPUTFILE="sndlhc_+volAdvTarget_"$NEVENTSPERJOB"_ADVSNDG18_02a_01_000.0.gst.root";;
 	transport_neutrinos) OUTPUTFILE=sndLHC.Genie-TGeant4.root;;
 	digitise) OUTPUTFILE=sndLHC.Genie-TGeant4_dig.root;;
+	pat_rec) OUTPUTFILE=sndLHC.Genie-TGeant4_dig_PR.root;;
 	*) echo "Unknown JOB $JOB"; exit 1;;
 esac
 

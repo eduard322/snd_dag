@@ -3,11 +3,13 @@ Job generate_input_file generate_input_file.sub
 Job convert_ghep_gst convert_ghep_gst.sub
 Job transport_neutrinos transport_neutrinos.sub
 Job digitise digitise.sub
+Job pat_rec pat_rec.sub
 DOT dag.dot UPDATE
 
 Parent generate_input_file Child convert_ghep_gst
 Parent convert_ghep_gst Child transport_neutrinos
 Parent transport_neutrinos Child digitise
+Parent digitise Child pat_rec
 
 SCRIPT PRE ALL_NODES check_files.sh $JOB
 
