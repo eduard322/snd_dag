@@ -6,7 +6,8 @@ error                 = logs/convert_ghep_gst.$(ClusterId).$(ProcId).err
 log                   = logs/convert_ghep_gst.$(ClusterId).log
 getenv = False
 notification = Never
+transfer_output_files = ""
 RequestCpus = 1
-requirements = (OpSysAndVer =?= "AlmaLinux9")
-+JobFlavour             ="longlunch"
++JobFlavour             ="espresso"
++AccountingGroup = "group_u_SNDLHC.users"
 queue $(NJOBS)

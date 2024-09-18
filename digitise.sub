@@ -6,6 +6,7 @@ error                 = logs/digitise.$(ClusterId).$(ProcId).err
 log                   = logs/digitise.$(ClusterId).log
 getenv = False
 notification = Never
+transfer_output_files = ""
 RequestCpus = 1
 requirements = (OpSysAndVer =?= "AlmaLinux9")
 +JobFlavour             ="longlunch"

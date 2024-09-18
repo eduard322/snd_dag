@@ -6,7 +6,9 @@ error                 = logs/transport_neutrinos.$(ClusterId).$(ProcId).err
 log                   = logs/transport_neutrinos.$(ClusterId).log
 getenv = False
 notification = Never
+transfer_output_files = ""
 RequestCpus = 1
 requirements = (OpSysAndVer =?= "AlmaLinux9")
 +JobFlavour             ="tomorrow"
++AccountingGroup = "group_u_SNDLHC.users"
 queue $(NJOBS)

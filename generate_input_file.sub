@@ -7,6 +7,7 @@ log                   = logs/generate_input_file.$(ClusterId).log
 getenv = False
 notification = Never
 RequestCpus = 1
-requirements = (OpSysAndVer =?= "AlmaLinux9")
-+JobFlavour = "testmatch"
+transfer_output_files = ""
++JobFlavour = "tomorrow"
++AccountingGroup = "group_u_SNDLHC.users"
 queue $(NJOBS)
