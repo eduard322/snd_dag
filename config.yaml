@@ -1,3 +1,5 @@
-neutrino_pid: 16
-geo_id: tiziano
-N: 10
+neutrino_pid: 12
+event_generator_list: CCDIS
+geo_id: advsnd_minimal_v3
+N: 1000
+target: volAdvTarget

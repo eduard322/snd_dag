@@ -28,24 +28,28 @@ rule generate_input_file:
         flux="HL-LHC_neutrinos_TI18_20e6pr_gsimple.root",
         mpl="mpl.xml"
     output:
-        expand("sndlhc_+volAdvTarget_{N}_ADVSNDG18_02a_01_000.0.ghep.root", N=config["N"])
+        expand("sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.ghep.root", N=config["N"], target=config["target"], neutrino_pid=config["neutrino_pid"], event_generator_list=config["event_generator_list"])
     shell:
         'gevgen_fnal -f "{input.flux},,-{config[neutrino_pid]},{config[neutrino_pid]}" \
           -g {input.geofile} \
-          -t "+volAdvTarget" \
-          -L "cm" -D "g_cm3" -n {config[N]} -o $(basename {output} .0.ghep.root) --tune SNDG18_02a_01_000 --cross-sections {input.xsection} --message-thresholds $GENIE/config/Messenger_laconic.xml -z -2 --event-generator-list CCDIS -m {input.mpl}'
+          -t "+{config[target]}" \
+          -L "cm" -D "g_cm3" -n {config[N]} -o $(basename {output} .0.ghep.root) \
+        --tune SNDG18_02a_01_000 --cross-sections {input.xsection} \
+        --message-thresholds $GENIE/config/Messenger_laconic.xml -z -3 \
+        --event-generator-list {config[event_generator_list]} -m {input.mpl}'
 
 rule run_sim:
     input:
-        inputfile=expand("sndlhc_+volAdvTarget_{N}_ADVSNDG18_02a_01_000.0.gst.root", N=config["N"]),
+        inputfile=expand("sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.gst.root", N=config["N"], target=config["target"], neutrino_pid=config["neutrino_pid"], event_generator_list=config["event_generator_list"]),
     output:
-        'sndLHC.Genie-TGeant4.root'
+        expand("sim_{neutrino_pid}_{event_generator_list}_{geo_id}_{N}/sndLHC.Genie-TGeant4.root", N=config["N"], geo_id=config["geo_id"], neutrino_pid=config["neutrino_pid"], event_generator_list=config["event_generator_list"])
     shell:
         'python $SNDSW_ROOT/shipLHC/run_simSND.py \
         --Genie 4 \
         -f {input.inputfile} \
         --AdvSND \
-        -n {config[N]}'
+        -n {config[N]} \
+        -o sim_{config[neutrino_pid]}_{config[event_generator_list]}_{config[geo_id]}_{config[N]}'
 
 rule generate_mpl_xml:
     input:
@@ -53,7 +57,7 @@ rule generate_mpl_xml:
     output:
         "mpl.xml"
     shell:
-        'gmxpl -f {input} -t "+volAdvTarget" -L "cm" -D "g_cm3" -o {output} --message-thresholds $GENIE/config/Messenger_laconic.xml'
+        'gmxpl -f {input} -t "+{config[target]}" -L "cm" -D "g_cm3" -o {output} --message-thresholds $GENIE/config/Messenger_laconic.xml'
 
 rule make_geofile:
     output:
