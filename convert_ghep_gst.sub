@@ -1,4 +1,6 @@
 executable            = convert_ghep_gst.sh
+NEVENTS = 100000
+NJOBS = 1000
 NEVENTSPERJOB = $(NEVENTS) / $(NJOBS)
 arguments             = $(ProcId) sndlhc_+volAdvTarget_$INT(NEVENTSPERJOB)_ADVSNDG18_02a_01_000.0.ghep.root
 output                = logs/convert_ghep_gst.$(ClusterId).$(ProcId).out

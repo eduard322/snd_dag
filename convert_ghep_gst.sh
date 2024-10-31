@@ -2,9 +2,7 @@
 set -o errexit -o pipefail -o noclobber
 
 # Set up SND environment
-ADVSNDBUILD_DIR=/afs/cern.ch/user/o/olantwin/SND
-source /cvmfs/sndlhc.cern.ch/SNDLHC-2023/Aug30/setUp.sh
-source $ADVSNDBUILD_DIR/snd_setup.sh
+source /afs/cern.ch/user/o/olantwin/SND/nusim_automation/config.sh
 
 set -o nounset
 
@@ -12,8 +10,7 @@ ProcId=$1
 LSB_JOBINDEX=$((ProcId+1))
 
 INPUT=$2
-EOSSERVER=root://eosuser.cern.ch/
-OUTPUTDIR=/eos/user/o/olantwin/advsnd/2024/01/numu/$LSB_JOBINDEX
+OUTPUTDIR=/eos/experiment/sndlhc/users/olantwin/advsnd/$OUTPUT_PREFIX/$LSB_JOBINDEX
 OUTPUT=$(basename $INPUT .ghep.root).gst.root
 
 set -x

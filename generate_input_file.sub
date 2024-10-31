@@ -1,4 +1,6 @@
 executable            = generate_input_file.sh
+NEVENTS = 100000
+NJOBS = 1000
 NEVENTSPERJOB = $INT(NEVENTS) / $INT(NJOBS)
 arguments             = $(ProcId) $INT(NEVENTSPERJOB)
 output                = logs/generate_input_file.$(ClusterId).$(ProcId).out

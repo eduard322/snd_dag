@@ -1,4 +1,6 @@
 executable            = transport_neutrinos.sh
+NEVENTS = 100000
+NJOBS = 1000
 NEVENTSPERJOB = $(NEVENTS) / $(NJOBS)
 arguments             = $(ProcId) sndlhc_+volAdvTarget_$INT(NEVENTSPERJOB)_ADVSNDG18_02a_01_000.0.gst.root $INT(NEVENTSPERJOB)
 output                = logs/transport_neutrinos.$(ClusterId).$(ProcId).out

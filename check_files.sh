@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
+source config.sh
 set -o errexit -o pipefail -o noclobber -o nounset
 set -x
 
 JOB=$1
-NEVENTS=1000000  # pass from dag?
+NEVENTS=100000 # pass from dag?
 NJOBS=1000
 NEVENTSPERJOB=$((NEVENTS / NJOBS))
 
-
-EOSSERVER=root://eosuser.cern.ch/
-OUTPUTDIR=/eos/user/o/olantwin/advsnd/2024/01/numu/
+EOSSERVER=root://eospublic.cern.ch/
+OUTPUTDIR=/eos/experiment/sndlhc/users/olantwin/advsnd/$OUTPUT_PREFIX
 
 case "${JOB}" in
 	generate_input_file) OUTPUTFILE="sndlhc_+volAdvTarget_"$NEVENTSPERJOB"_ADVSNDG18_02a_01_000.0.ghep.root";;

@@ -2,29 +2,24 @@
 set -o errexit -o pipefail -o noclobber
 
 # Set up SND environment
-ADVSNDBUILD_DIR=/afs/cern.ch/user/o/olantwin/SND
-source /cvmfs/sndlhc.cern.ch/SNDLHC-2023/Aug30/setUp.sh
-source $ADVSNDBUILD_DIR/snd_setup.sh
+source /afs/cern.ch/user/o/olantwin/SND/nusim_automation/config.sh
 
 set -o nounset
 
-GEOFILE="/afs/cern.ch/user/o/olantwin/SND/geofile.050124.gdml"
-MPL="/afs/cern.ch/user/o/olantwin/SND/mpl.xml"
-XSECTION="/afs/cern.ch/user/o/olantwin/public/genie_splines_GENIE_v32_ADVSNDG18_02a_01_000_2.xml"
-FLUX="/afs/cern.ch/user/o/olantwin/public/HL-LHC_neutrinos_TI18_20e6pr_gsimple.root"
+FILEDIR="$EOSSERVER/eos/experiment/sndlhc/users/olantwin/advsnd"
+MPL="$FILEDIR/mpl.xml"
+XSECTION="$FILEDIR/genie_splines_GENIE_v32_ADVSNDG18_02a_01_000_2.xml"
+FLUX="$FILEDIR/HL-LHC_neutrinos_TI18_20e6pr_gsimple.root"
 NEVENTS=$2
 TUNE=SNDG18_02a_01_000
-EVENTGENLIST=CCDIS
 TOPVOLUME="+volAdvTarget"
 OUTPUTFILE="sndlhc_"$TOPVOLUME"_"$NEVENTS"_ADV"$TUNE".0.ghep.root"
-NEUTRINO=14
 
 ProcId=$1
 LSB_JOBINDEX=$((ProcId+1))
 SEED=$LSB_JOBINDEX
 
-EOSSERVER=root://eosuser.cern.ch/
-OUTPUTDIR=/eos/user/o/olantwin/advsnd/2024/01/numu/$LSB_JOBINDEX
+OUTPUTDIR=/eos/experiment/sndlhc/users/olantwin/advsnd/$OUTPUT_PREFIX/$LSB_JOBINDEX
 
 set -x
 
@@ -32,6 +27,14 @@ if xrdfs $EOSSERVER stat $OUTPUTDIR/$OUTPUTFILE; then
 	echo "Target exists, nothing to do."
 	exit 0
 fi
+
+xrdcp $XSECTION .
+
+XSECTION="genie_splines_GENIE_v32_ADVSNDG18_02a_01_000_2.xml"
+
+xrdcp $MPL .
+
+MPL="mpl.xml"
 
 gevgen_fnal -f "$FLUX,,-$NEUTRINO,$NEUTRINO" \
     -g $GEOFILE \
@@ -44,7 +47,7 @@ gevgen_fnal -f "$FLUX,,-$NEUTRINO,$NEUTRINO" \
     --cross-sections $XSECTION \
     --message-thresholds $GENIE/config/Messenger_laconic.xml \
     --seed $SEED \
-    -z -2 \
+    -z -3 \
     --event-generator-list $EVENTGENLIST \
     -m $MPL
 
