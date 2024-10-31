@@ -25,6 +25,7 @@ fi
 xrdcp $EOSSERVER/$OUTPUTDIR/$INPUTFILE ./$INPUTFILE
 xrdcp $EOSSERVER/$OUTPUTDIR/$GEOFILE ./$GEOFILE
 
-python $SNDSW_ROOT/shipLHC/run_digiSND.py -f $INPUTFILE -g $GEOFILE > /dev/null
+python $SNDSW_ROOT/shipLHC/run_digiSND.py -f $INPUTFILE -g $GEOFILE -cpp
+mv $(basename $INPUTFILE .root)_digCPP.root $OUTPUTFILE
 
 xrdcp $OUTPUTFILE $EOSSERVER/$OUTPUTDIR/$OUTPUTFILE
