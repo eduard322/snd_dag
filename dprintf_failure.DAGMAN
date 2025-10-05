@@ -1,0 +1,3 @@
+dprintf() had a fatal error in pid 1708703
+Error writing debug log
+ errno: 102 (Network dropped connection on reset) euid: 148426, ruid: 148426

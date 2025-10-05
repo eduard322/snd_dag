@@ -1,15 +1,36 @@
 executable            = generate_input_file.sh
-NEVENTS = 100000
-NJOBS = 1000
+#NEVENTS = 500000
+#NJOBS = 1000
 NEVENTSPERJOB = $INT(NEVENTS) / $INT(NJOBS)
-arguments             = $(ProcId) $INT(NEVENTSPERJOB)
-output                = logs/generate_input_file.$(ClusterId).$(ProcId).out
-error                 = logs/generate_input_file.$(ClusterId).$(ProcId).err
-log                   = logs/generate_input_file.$(ClusterId).log
-getenv = False
+arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR)
+#output                = /afs/cern.ch/user/u/ursovsnd/neutrino/pythia_flux/nusim_automation/logs/generate_input_file.$(ClusterId).$(ProcId).out
+#error                 = /afs/cern.ch/user/u/ursovsnd/neutrino/pythia_flux/nusim_automation/logs/generate_input_file.$(ClusterId).$(ProcId).err
+#log                   = /afs/cern.ch/user/u/ursovsnd/neutrino/pythia_flux/nusim_automation/logs/generate_input_file.$(ClusterId).$(ProcId).log
+#output                = ./logs/generate_input_file.$(ClusterId).$(ProcId).out
+output                 = /dev/null
+error                 = ./logs/generate_input_file.$(ClusterId).$(ProcId).err
+log                   = ./logs/generate_input_file.$(ClusterId).$(ProcId).log
+
+# ----- automatic retry logic -----
+# Consider exit‑code 0 a success…
+success_exit_code = 0
+# …otherwise retry up to 5 times
+max_retries       = 3
+# (optional) stop retrying if we hit a specific exit code
+# retry_until      = !member(ExitCode,{2,13,42})
+# ---------------------------------
+
+stream_output = False
+
+
+#getenv = False
+getenv = True
+#should_transfer_files = NO
+transfer_output_files = ""
 notification = Never
 RequestCpus = 1
-transfer_output_files = ""
+#transfer_output_files = ""
 +JobFlavour = "tomorrow"
+#+AccountingGroup = "group_u_SNDLHC.users"
 +AccountingGroup = "group_u_SNDLHC.users"
 queue $(NJOBS)

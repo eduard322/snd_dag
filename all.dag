@@ -1,19 +1,13 @@
-VARS ALL_NODES NEVENTS="1000000" NJOBS="1000"
+VARS ALL_NODES TAG="2025/03_test_low_CC_no_logs_new_dag" NEVENTS="100" TOPVOL="volMuFilter" NEUTRINO="14" EVENTGENLIST="CC"  NJOBS="10" COLNUM="1.1715e13" CONDOR_FOLDER="/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag" YEAR="2024"
 Job generate_input_file generate_input_file.sub
-Job convert_ghep_gst convert_ghep_gst.sub
 Job transport_neutrinos transport_neutrinos.sub
 Job digitise digitise.sub
-Job pat_rec pat_rec.sub
 DOT dag.dot UPDATE
 
-Parent generate_input_file Child convert_ghep_gst
-Parent convert_ghep_gst Child transport_neutrinos
+#Parent generate_input_file Child convert_ghep_gst
+Parent generate_input_file Child transport_neutrinos
+#Parent convert_ghep_gst Child transport_neutrinos
 Parent transport_neutrinos Child digitise
-Parent digitise Child pat_rec
 
-SCRIPT PRE ALL_NODES check_files.sh $JOB
 
 PRE_SKIP ALL_NODES 2
-
-# SAVE_POINT_FILE generate_input_file
-# SAVE_POINT_FILE convert_ghep_gst

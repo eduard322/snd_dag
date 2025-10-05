@@ -1,0 +1,10 @@
+digraph DAG {
+    label="DAGMan Job status at Sun Oct  5 21:01:19 2025";
+
+    "generate_input_file" [shape=ellipse label="generate_input_file (Done)" style=bold];
+    "transport_neutrinos" [shape=ellipse label="transport_neutrinos (Done)" style=bold];
+    "digitise" [shape=ellipse label="digitise (Done)" style=bold];
+
+    "generate_input_file" -> "transport_neutrinos";
+    "transport_neutrinos" -> "digitise";
+}

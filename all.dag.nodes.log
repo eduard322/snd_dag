@@ -1,0 +1,870 @@
+000 (13431592.000.000) 10/05 20:59:24 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: generate_input_file
+...
+000 (13431592.001.000) 10/05 20:59:24 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: generate_input_file
+...
+000 (13431592.002.000) 10/05 20:59:24 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: generate_input_file
+...
+000 (13431592.003.000) 10/05 20:59:24 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: generate_input_file
+...
+000 (13431592.004.000) 10/05 20:59:24 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: generate_input_file
+...
+000 (13431592.005.000) 10/05 20:59:24 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: generate_input_file
+...
+000 (13431592.006.000) 10/05 20:59:24 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: generate_input_file
+...
+000 (13431592.007.000) 10/05 20:59:24 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: generate_input_file
+...
+000 (13431592.008.000) 10/05 20:59:24 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: generate_input_file
+...
+000 (13431592.009.000) 10/05 20:59:24 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: generate_input_file
+...
+001 (13431592.005.000) 10/05 21:00:01 Job executing on host: <188.185.194.156:9618?addrs=188.185.194.156-9618+[2001-1458-303-21--100-98]-9618&alias=b9p20p1008.cern.ch&noUDP&sock=startd_3628_15af>
+	SlotName: slot1_21@b9p20p1008.cern.ch
+	CondorScratchDir = "/pool/condor/dir_1388837"
+	Cpus = 1
+	Disk = 3805
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431592.003.000) 10/05 21:00:02 Job executing on host: <188.185.193.30:9618?addrs=188.185.193.30-9618+[2001-1458-303-20--100-1a]-9618&alias=b9p19p2854.cern.ch&noUDP&sock=startd_4154_e080>
+	SlotName: slot1_27@b9p19p2854.cern.ch
+	CondorScratchDir = "/pool/condor/dir_3525623"
+	Cpus = 1
+	Disk = 3854
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431592.001.000) 10/05 21:00:02 Job executing on host: <128.142.33.41:9618?addrs=128.142.33.41-9618+[2001-1458-301-53--100-26]-9618&alias=b9g34p3999.cern.ch&noUDP&sock=startd_3623_a7b6>
+	SlotName: slot1_28@b9g34p3999.cern.ch
+	CondorScratchDir = "/pool/condor/dir_3631563"
+	Cpus = 1
+	Disk = 3721
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431592.000.000) 10/05 21:00:02 Job executing on host: <128.142.33.55:9618?addrs=128.142.33.55-9618+[2001-1458-301-53--100-34]-9618&alias=b9g34p2738.cern.ch&noUDP&sock=startd_4025_64c8>
+	SlotName: slot1_22@b9g34p2738.cern.ch
+	CondorScratchDir = "/pool/condor/dir_1262634"
+	Cpus = 1
+	Disk = 3758
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431592.006.000) 10/05 21:00:03 Job executing on host: <188.185.194.179:9618?addrs=188.185.194.179-9618+[2001-1458-303-21--100-af]-9618&alias=b9p20p5315.cern.ch&noUDP&sock=startd_3657_f9ee>
+	SlotName: slot1_9@b9p20p5315.cern.ch
+	CondorScratchDir = "/pool/condor/dir_884144"
+	Cpus = 1
+	Disk = 3887
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431592.004.000) 10/05 21:00:03 Job executing on host: <188.185.194.138:9618?addrs=188.185.194.138-9618+[2001-1458-303-21--100-86]-9618&alias=b9p20p7221.cern.ch&noUDP&sock=startd_4903_a0f0>
+	SlotName: slot1_28@b9p20p7221.cern.ch
+	CondorScratchDir = "/pool/condor/dir_2676258"
+	Cpus = 1
+	Disk = 3863
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431592.007.000) 10/05 21:00:04 Job executing on host: <188.185.196.187:9618?addrs=188.185.196.187-9618+[2001-1458-303-23--100-b7]-9618&alias=b9p16p4396.cern.ch&noUDP&sock=startd_2594_d8c2>
+	SlotName: slot1_34@b9p16p4396.cern.ch
+	CondorScratchDir = "/pool/condor/dir_179661"
+	Cpus = 1
+	Disk = 3894
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431592.002.000) 10/05 21:00:04 Job executing on host: <128.142.33.53:9618?addrs=128.142.33.53-9618+[2001-1458-301-53--100-32]-9618&alias=b9g34p7549.cern.ch&noUDP&sock=startd_5791_b909>
+	SlotName: slot1_15@b9g34p7549.cern.ch
+	CondorScratchDir = "/pool/condor/dir_864178"
+	Cpus = 1
+	Disk = 3838
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431592.008.000) 10/05 21:00:05 Job executing on host: <188.185.195.95:9618?addrs=188.185.195.95-9618+[2001-1458-303-22--100-5b]-9618&alias=b9p17p1975.cern.ch&noUDP&sock=startd_4258_365a>
+	SlotName: slot1_53@b9p17p1975.cern.ch
+	CondorScratchDir = "/pool/condor/dir_3184913"
+	Cpus = 1
+	Disk = 3905
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431592.009.000) 10/05 21:00:05 Job executing on host: <188.185.195.78:9618?addrs=188.185.195.78-9618+[2001-1458-303-22--100-4a]-9618&alias=b9p17p1349.cern.ch&noUDP&sock=startd_10042_8e22>
+	SlotName: slot1_8@b9p17p1349.cern.ch
+	CondorScratchDir = "/pool/condor/dir_169644"
+	Cpus = 1
+	Disk = 3921
+	GPUs = 0
+	Memory = 3000
+...
+005 (13431592.005.000) 10/05 21:00:09 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	407  -  Run Bytes Sent By Job
+	2746  -  Run Bytes Received By Job
+	407  -  Total Bytes Sent By Job
+	2746  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       31        3      3805 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:09Z with exit-code 0.
+...
+005 (13431592.000.000) 10/05 21:00:10 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	407  -  Run Bytes Sent By Job
+	2746  -  Run Bytes Received By Job
+	407  -  Total Bytes Sent By Job
+	2746  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       31        3      3758 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:10Z with exit-code 0.
+...
+005 (13431592.001.000) 10/05 21:00:11 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	407  -  Run Bytes Sent By Job
+	2746  -  Run Bytes Received By Job
+	407  -  Total Bytes Sent By Job
+	2746  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :                 1         1 
+	   Disk (KB)            :       23        3      3721 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:11Z with exit-code 0.
+...
+005 (13431592.003.000) 10/05 21:00:11 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	407  -  Run Bytes Sent By Job
+	2746  -  Run Bytes Received By Job
+	407  -  Total Bytes Sent By Job
+	2746  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       31        3      3854 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:11Z with exit-code 0.
+...
+005 (13431592.006.000) 10/05 21:00:11 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	407  -  Run Bytes Sent By Job
+	2746  -  Run Bytes Received By Job
+	407  -  Total Bytes Sent By Job
+	2746  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       31        3      3887 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:11Z with exit-code 0.
+...
+005 (13431592.004.000) 10/05 21:00:11 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	407  -  Run Bytes Sent By Job
+	2746  -  Run Bytes Received By Job
+	407  -  Total Bytes Sent By Job
+	2746  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       32        3      3863 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:11Z with exit-code 0.
+...
+005 (13431592.007.000) 10/05 21:00:12 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	407  -  Run Bytes Sent By Job
+	2746  -  Run Bytes Received By Job
+	407  -  Total Bytes Sent By Job
+	2746  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       31        3      3894 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:12Z with exit-code 0.
+...
+005 (13431592.002.000) 10/05 21:00:13 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	407  -  Run Bytes Sent By Job
+	2746  -  Run Bytes Received By Job
+	407  -  Total Bytes Sent By Job
+	2746  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       31        3      3838 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:13Z with exit-code 0.
+...
+005 (13431592.008.000) 10/05 21:00:13 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	407  -  Run Bytes Sent By Job
+	2746  -  Run Bytes Received By Job
+	407  -  Total Bytes Sent By Job
+	2746  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       31        3      3905 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:13Z with exit-code 0.
+...
+005 (13431592.009.000) 10/05 21:00:14 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	408  -  Run Bytes Sent By Job
+	2746  -  Run Bytes Received By Job
+	408  -  Total Bytes Sent By Job
+	2746  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       31        3      3921 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:14Z with exit-code 0.
+...
+000 (13431593.000.000) 10/05 21:00:19 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: transport_neutrinos
+...
+000 (13431593.001.000) 10/05 21:00:19 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: transport_neutrinos
+...
+000 (13431593.002.000) 10/05 21:00:19 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: transport_neutrinos
+...
+000 (13431593.003.000) 10/05 21:00:19 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: transport_neutrinos
+...
+000 (13431593.004.000) 10/05 21:00:19 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: transport_neutrinos
+...
+000 (13431593.005.000) 10/05 21:00:19 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: transport_neutrinos
+...
+000 (13431593.006.000) 10/05 21:00:19 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: transport_neutrinos
+...
+000 (13431593.007.000) 10/05 21:00:19 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: transport_neutrinos
+...
+000 (13431593.008.000) 10/05 21:00:19 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: transport_neutrinos
+...
+000 (13431593.009.000) 10/05 21:00:19 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: transport_neutrinos
+...
+001 (13431593.000.000) 10/05 21:00:20 Job executing on host: <188.185.195.95:9618?addrs=188.185.195.95-9618+[2001-1458-303-22--100-5b]-9618&alias=b9p17p1975.cern.ch&noUDP&sock=startd_4258_365a>
+	SlotName: slot1_53@b9p17p1975.cern.ch
+	CondorScratchDir = "/pool/condor/dir_3185743"
+	Cpus = 1
+	Disk = 3905
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431593.001.000) 10/05 21:00:20 Job executing on host: <188.185.194.138:9618?addrs=188.185.194.138-9618+[2001-1458-303-21--100-86]-9618&alias=b9p20p7221.cern.ch&noUDP&sock=startd_4903_a0f0>
+	SlotName: slot1_28@b9p20p7221.cern.ch
+	CondorScratchDir = "/pool/condor/dir_2676573"
+	Cpus = 1
+	Disk = 3863
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431593.002.000) 10/05 21:00:20 Job executing on host: <128.142.33.55:9618?addrs=128.142.33.55-9618+[2001-1458-301-53--100-34]-9618&alias=b9g34p2738.cern.ch&noUDP&sock=startd_4025_64c8>
+	SlotName: slot1_22@b9g34p2738.cern.ch
+	CondorScratchDir = "/pool/condor/dir_1263255"
+	Cpus = 1
+	Disk = 3758
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431593.004.000) 10/05 21:00:21 Job executing on host: <188.185.194.156:9618?addrs=188.185.194.156-9618+[2001-1458-303-21--100-98]-9618&alias=b9p20p1008.cern.ch&noUDP&sock=startd_3628_15af>
+	SlotName: slot1_21@b9p20p1008.cern.ch
+	CondorScratchDir = "/pool/condor/dir_1389315"
+	Cpus = 1
+	Disk = 3805
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431593.003.000) 10/05 21:00:21 Job executing on host: <188.185.194.179:9618?addrs=188.185.194.179-9618+[2001-1458-303-21--100-af]-9618&alias=b9p20p5315.cern.ch&noUDP&sock=startd_3657_f9ee>
+	SlotName: slot1_9@b9p20p5315.cern.ch
+	CondorScratchDir = "/pool/condor/dir_1124916"
+	Cpus = 1
+	Disk = 3887
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431593.005.000) 10/05 21:00:21 Job executing on host: <128.142.33.41:9618?addrs=128.142.33.41-9618+[2001-1458-301-53--100-26]-9618&alias=b9g34p3999.cern.ch&noUDP&sock=startd_3623_a7b6>
+	SlotName: slot1_28@b9g34p3999.cern.ch
+	CondorScratchDir = "/pool/condor/dir_3747210"
+	Cpus = 1
+	Disk = 3721
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431593.006.000) 10/05 21:00:22 Job executing on host: <188.185.196.187:9618?addrs=188.185.196.187-9618+[2001-1458-303-23--100-b7]-9618&alias=b9p16p4396.cern.ch&noUDP&sock=startd_2594_d8c2>
+	SlotName: slot1_34@b9p16p4396.cern.ch
+	CondorScratchDir = "/pool/condor/dir_180595"
+	Cpus = 1
+	Disk = 3899
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431593.007.000) 10/05 21:00:22 Job executing on host: <188.185.195.78:9618?addrs=188.185.195.78-9618+[2001-1458-303-22--100-4a]-9618&alias=b9p17p1349.cern.ch&noUDP&sock=startd_10042_8e22>
+	SlotName: slot1_8@b9p17p1349.cern.ch
+	CondorScratchDir = "/pool/condor/dir_475954"
+	Cpus = 1
+	Disk = 3921
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431593.008.000) 10/05 21:00:22 Job executing on host: <128.142.33.53:9618?addrs=128.142.33.53-9618+[2001-1458-301-53--100-32]-9618&alias=b9g34p7549.cern.ch&noUDP&sock=startd_5791_b909>
+	SlotName: slot1_15@b9g34p7549.cern.ch
+	CondorScratchDir = "/pool/condor/dir_864471"
+	Cpus = 1
+	Disk = 3838
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431593.009.000) 10/05 21:00:23 Job executing on host: <188.185.193.30:9618?addrs=188.185.193.30-9618+[2001-1458-303-20--100-1a]-9618&alias=b9p19p2854.cern.ch&noUDP&sock=startd_4154_e080>
+	SlotName: slot1_27@b9p19p2854.cern.ch
+	CondorScratchDir = "/pool/condor/dir_4149166"
+	Cpus = 1
+	Disk = 3854
+	GPUs = 0
+	Memory = 3000
+...
+005 (13431593.003.000) 10/05 21:00:29 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	810  -  Run Bytes Sent By Job
+	2204  -  Run Bytes Received By Job
+	810  -  Total Bytes Sent By Job
+	2204  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       30        3      3887 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:29Z with exit-code 0.
+...
+005 (13431593.004.000) 10/05 21:00:29 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	810  -  Run Bytes Sent By Job
+	2204  -  Run Bytes Received By Job
+	810  -  Total Bytes Sent By Job
+	2204  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       31        3      3805 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:29Z with exit-code 0.
+...
+005 (13431593.000.000) 10/05 21:00:29 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	810  -  Run Bytes Sent By Job
+	2204  -  Run Bytes Received By Job
+	810  -  Total Bytes Sent By Job
+	2204  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       30        3      3905 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:29Z with exit-code 0.
+...
+005 (13431593.002.000) 10/05 21:00:29 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	810  -  Run Bytes Sent By Job
+	2204  -  Run Bytes Received By Job
+	810  -  Total Bytes Sent By Job
+	2204  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       30        3      3758 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:29Z with exit-code 0.
+...
+005 (13431593.001.000) 10/05 21:00:29 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	810  -  Run Bytes Sent By Job
+	2204  -  Run Bytes Received By Job
+	810  -  Total Bytes Sent By Job
+	2204  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       31        3      3863 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:29Z with exit-code 0.
+...
+005 (13431593.005.000) 10/05 21:00:29 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	810  -  Run Bytes Sent By Job
+	2204  -  Run Bytes Received By Job
+	810  -  Total Bytes Sent By Job
+	2204  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       30        3      3721 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:29Z with exit-code 0.
+...
+005 (13431593.006.000) 10/05 21:00:29 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	810  -  Run Bytes Sent By Job
+	2204  -  Run Bytes Received By Job
+	810  -  Total Bytes Sent By Job
+	2204  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       30        3      3899 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:29Z with exit-code 0.
+...
+005 (13431593.007.000) 10/05 21:00:29 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	810  -  Run Bytes Sent By Job
+	2204  -  Run Bytes Received By Job
+	810  -  Total Bytes Sent By Job
+	2204  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       30        3      3921 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:29Z with exit-code 0.
+...
+005 (13431593.008.000) 10/05 21:00:30 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:01, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	810  -  Run Bytes Sent By Job
+	2204  -  Run Bytes Received By Job
+	810  -  Total Bytes Sent By Job
+	2204  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       30        3      3838 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:30Z with exit-code 0.
+...
+005 (13431593.009.000) 10/05 21:00:31 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	812  -  Run Bytes Sent By Job
+	2204  -  Run Bytes Received By Job
+	812  -  Total Bytes Sent By Job
+	2204  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :       30        3      3854 
+	   GPUs                 :                           0 
+	   Memory (MB)          :        0     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:00:30Z with exit-code 0.
+...
+000 (13431594.000.000) 10/05 21:00:39 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: digitise
+...
+000 (13431594.001.000) 10/05 21:00:39 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: digitise
+...
+000 (13431594.002.000) 10/05 21:00:39 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: digitise
+...
+000 (13431594.003.000) 10/05 21:00:39 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: digitise
+...
+000 (13431594.004.000) 10/05 21:00:39 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: digitise
+...
+000 (13431594.005.000) 10/05 21:00:39 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: digitise
+...
+000 (13431594.006.000) 10/05 21:00:39 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: digitise
+...
+000 (13431594.007.000) 10/05 21:00:39 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: digitise
+...
+000 (13431594.008.000) 10/05 21:00:39 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: digitise
+...
+000 (13431594.009.000) 10/05 21:00:39 Job submitted from host: <188.184.90.62:9618?addrs=188.184.90.62-9618+[2001-1458-201-e4--100-238]-9618&alias=bigbird16.cern.ch&noUDP&sock=schedd_2089_756e>
+    DAG Node: digitise
+...
+001 (13431594.000.000) 10/05 21:00:40 Job executing on host: <188.185.195.95:9618?addrs=188.185.195.95-9618+[2001-1458-303-22--100-5b]-9618&alias=b9p17p1975.cern.ch&noUDP&sock=startd_4258_365a>
+	SlotName: slot1_53@b9p17p1975.cern.ch
+	CondorScratchDir = "/pool/condor/dir_3186476"
+	Cpus = 1
+	Disk = 3905
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431594.001.000) 10/05 21:00:40 Job executing on host: <188.185.194.138:9618?addrs=188.185.194.138-9618+[2001-1458-303-21--100-86]-9618&alias=b9p20p7221.cern.ch&noUDP&sock=startd_4903_a0f0>
+	SlotName: slot1_28@b9p20p7221.cern.ch
+	CondorScratchDir = "/pool/condor/dir_2677010"
+	Cpus = 1
+	Disk = 3863
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431594.004.000) 10/05 21:00:40 Job executing on host: <188.185.194.156:9618?addrs=188.185.194.156-9618+[2001-1458-303-21--100-98]-9618&alias=b9p20p1008.cern.ch&noUDP&sock=startd_3628_15af>
+	SlotName: slot1_21@b9p20p1008.cern.ch
+	CondorScratchDir = "/pool/condor/dir_1389721"
+	Cpus = 1
+	Disk = 3805
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431594.003.000) 10/05 21:00:40 Job executing on host: <188.185.194.179:9618?addrs=188.185.194.179-9618+[2001-1458-303-21--100-af]-9618&alias=b9p20p5315.cern.ch&noUDP&sock=startd_3657_f9ee>
+	SlotName: slot1_9@b9p20p5315.cern.ch
+	CondorScratchDir = "/pool/condor/dir_1244741"
+	Cpus = 1
+	Disk = 3887
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431594.002.000) 10/05 21:00:40 Job executing on host: <128.142.33.55:9618?addrs=128.142.33.55-9618+[2001-1458-301-53--100-34]-9618&alias=b9g34p2738.cern.ch&noUDP&sock=startd_4025_64c8>
+	SlotName: slot1_22@b9g34p2738.cern.ch
+	CondorScratchDir = "/pool/condor/dir_1263904"
+	Cpus = 1
+	Disk = 3758
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431594.006.000) 10/05 21:00:41 Job executing on host: <188.185.196.187:9618?addrs=188.185.196.187-9618+[2001-1458-303-23--100-b7]-9618&alias=b9p16p4396.cern.ch&noUDP&sock=startd_2594_d8c2>
+	SlotName: slot1_34@b9p16p4396.cern.ch
+	CondorScratchDir = "/pool/condor/dir_181329"
+	Cpus = 1
+	Disk = 3898
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431594.005.000) 10/05 21:00:41 Job executing on host: <128.142.33.41:9618?addrs=128.142.33.41-9618+[2001-1458-301-53--100-26]-9618&alias=b9g34p3999.cern.ch&noUDP&sock=startd_3623_a7b6>
+	SlotName: slot1_28@b9g34p3999.cern.ch
+	CondorScratchDir = "/pool/condor/dir_3878592"
+	Cpus = 1
+	Disk = 3721
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431594.007.000) 10/05 21:00:41 Job executing on host: <188.185.195.78:9618?addrs=188.185.195.78-9618+[2001-1458-303-22--100-4a]-9618&alias=b9p17p1349.cern.ch&noUDP&sock=startd_10042_8e22>
+	SlotName: slot1_8@b9p17p1349.cern.ch
+	CondorScratchDir = "/pool/condor/dir_616765"
+	Cpus = 1
+	Disk = 3921
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431594.009.000) 10/05 21:00:42 Job executing on host: <188.185.193.30:9618?addrs=188.185.193.30-9618+[2001-1458-303-20--100-1a]-9618&alias=b9p19p2854.cern.ch&noUDP&sock=startd_4154_e080>
+	SlotName: slot1_27@b9p19p2854.cern.ch
+	CondorScratchDir = "/pool/condor/dir_461297"
+	Cpus = 1
+	Disk = 3854
+	GPUs = 0
+	Memory = 3000
+...
+001 (13431594.008.000) 10/05 21:00:42 Job executing on host: <128.142.33.53:9618?addrs=128.142.33.53-9618+[2001-1458-301-53--100-32]-9618&alias=b9g34p7549.cern.ch&noUDP&sock=startd_5791_b909>
+	SlotName: slot1_15@b9g34p7549.cern.ch
+	CondorScratchDir = "/pool/condor/dir_864666"
+	Cpus = 1
+	Disk = 3838
+	GPUs = 0
+	Memory = 3000
+...
+005 (13431594.004.000) 10/05 21:01:00 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:12, Sys 0 00:00:01  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:12, Sys 0 00:00:01  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3894  -  Run Bytes Sent By Job
+	1813  -  Run Bytes Received By Job
+	3894  -  Total Bytes Sent By Job
+	1813  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :     9941        2      3805 
+	   GPUs                 :                           0 
+	   Memory (MB)          :      221     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:01:00Z with exit-code 0.
+...
+005 (13431594.006.000) 10/05 21:01:01 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:11, Sys 0 00:00:02  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:11, Sys 0 00:00:02  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3895  -  Run Bytes Sent By Job
+	1813  -  Run Bytes Received By Job
+	3895  -  Total Bytes Sent By Job
+	1813  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :     9703        2      3898 
+	   GPUs                 :                           0 
+	   Memory (MB)          :      195     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:01:01Z with exit-code 0.
+...
+005 (13431594.002.000) 10/05 21:01:02 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:12, Sys 0 00:00:02  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:12, Sys 0 00:00:02  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3895  -  Run Bytes Sent By Job
+	1813  -  Run Bytes Received By Job
+	3895  -  Total Bytes Sent By Job
+	1813  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :    11066        2      3758 
+	   GPUs                 :                           0 
+	   Memory (MB)          :      196     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:01:02Z with exit-code 0.
+...
+005 (13431594.003.000) 10/05 21:01:03 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:11, Sys 0 00:00:02  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:11, Sys 0 00:00:02  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3896  -  Run Bytes Sent By Job
+	1813  -  Run Bytes Received By Job
+	3896  -  Total Bytes Sent By Job
+	1813  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :    11297        2      3887 
+	   GPUs                 :                           0 
+	   Memory (MB)          :      186     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:01:03Z with exit-code 0.
+...
+005 (13431594.005.000) 10/05 21:01:05 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:13, Sys 0 00:00:02  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:13, Sys 0 00:00:02  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3910  -  Run Bytes Sent By Job
+	1813  -  Run Bytes Received By Job
+	3910  -  Total Bytes Sent By Job
+	1813  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :     9811        2      3721 
+	   GPUs                 :                           0 
+	   Memory (MB)          :      171     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:01:05Z with exit-code 0.
+...
+005 (13431594.009.000) 10/05 21:01:05 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:11, Sys 0 00:00:02  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:11, Sys 0 00:00:02  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3899  -  Run Bytes Sent By Job
+	1813  -  Run Bytes Received By Job
+	3899  -  Total Bytes Sent By Job
+	1813  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :    13576        2      3854 
+	   GPUs                 :                           0 
+	   Memory (MB)          :      185     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:01:05Z with exit-code 0.
+...
+005 (13431594.007.000) 10/05 21:01:05 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:11, Sys 0 00:00:02  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:11, Sys 0 00:00:02  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3896  -  Run Bytes Sent By Job
+	1813  -  Run Bytes Received By Job
+	3896  -  Total Bytes Sent By Job
+	1813  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :     8982        2      3921 
+	   GPUs                 :                           0 
+	   Memory (MB)          :      151     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:01:05Z with exit-code 0.
+...
+005 (13431594.008.000) 10/05 21:01:10 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:13, Sys 0 00:00:02  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:13, Sys 0 00:00:02  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	3897  -  Run Bytes Sent By Job
+	1813  -  Run Bytes Received By Job
+	3897  -  Total Bytes Sent By Job
+	1813  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :     9692        2      3838 
+	   GPUs                 :                           0 
+	   Memory (MB)          :      155     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:01:10Z with exit-code 0.
+...
+005 (13431594.000.000) 10/05 21:01:17 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:20, Sys 0 00:00:06  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:20, Sys 0 00:00:06  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	26101  -  Run Bytes Sent By Job
+	1813  -  Run Bytes Received By Job
+	26101  -  Total Bytes Sent By Job
+	1813  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :     3227        2      3905 
+	   GPUs                 :                           0 
+	   Memory (MB)          :      152     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:01:17Z with exit-code 0.
+...
+005 (13431594.001.000) 10/05 21:01:18 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:22, Sys 0 00:00:07  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:22, Sys 0 00:00:07  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	26101  -  Run Bytes Sent By Job
+	1813  -  Run Bytes Received By Job
+	26101  -  Total Bytes Sent By Job
+	1813  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated 
+	   Cpus                 :        0        1         1 
+	   Disk (KB)            :     6255        2      3863 
+	   GPUs                 :                           0 
+	   Memory (MB)          :      138     3000      3000 
+
+	Job terminated of its own accord at 2025-10-05T19:01:18Z with exit-code 0.
+...

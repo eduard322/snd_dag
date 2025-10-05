@@ -1,74 +1,137 @@
+import os
 configfile: "config.yaml"
 
-rule add_auxiliary_to_gst:
-    input:
-        gst="{name}.ghep.root",
-        ghep="{name}.gst.root"
-    log:
-        "{name}_aux.gst.log"
-    output:
-        "{name}_aux.gst.root"
-    shell:
-        "cp {input.gst} {output} && addAuxiliaryToGST {input.ghep} {input.gst}"
+eos_dir = config["eos_dir"]
+neutrino_pid = config['neutrino_pid']
+target = config['target']
+event_generator_list = config['event_generator_list']
+N = config['N']
+geo_id = config['geo_id']
 
-rule convert_ghep_gst:
-    input:
-        "{name}.ghep.root"
-    log:
-        "{name}.gst.log"
-    output:
-        "{name}.gst.root"
-    shell:
-        "gntpc -i {input} -f gst -o {output} -c"
 
-rule generate_input_file:
-    input:
-        geofile=expand("geofile.{geo_id}.gdml", geo_id=config["geo_id"]),
-        xsection="genie_splines_GENIE_v32_ADVSNDG18_02a_01_000_2.xml",
-        flux="HL-LHC_neutrinos_TI18_20e6pr_gsimple.root",
-        mpl="mpl.xml"
-    output:
-        expand("sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.ghep.root", N=config["N"], target=config["target"], neutrino_pid=config["neutrino_pid"], event_generator_list=config["event_generator_list"])
-    shell:
-        'gevgen_fnal -f "{input.flux},,-{config[neutrino_pid]},{config[neutrino_pid]}" \
-          -g {input.geofile} \
-          -t "+{config[target]}" \
-          -L "cm" -D "g_cm3" -n {config[N]} -o $(basename {output} .0.ghep.root) \
-        --tune SNDG18_02a_01_000 --cross-sections {input.xsection} \
-        --message-thresholds $GENIE/config/Messenger_laconic.xml -z -3 \
-        --event-generator-list {config[event_generator_list]} -m {input.mpl}'
 
-rule run_sim:
-    input:
-        inputfile=expand("sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.gst.root", N=config["N"], target=config["target"], neutrino_pid=config["neutrino_pid"], event_generator_list=config["event_generator_list"]),
-    output:
-        expand("sim_{neutrino_pid}_{event_generator_list}_{geo_id}_{N}/sndLHC.Genie-TGeant4.root", N=config["N"], geo_id=config["geo_id"], neutrino_pid=config["neutrino_pid"], event_generator_list=config["event_generator_list"])
-    shell:
-        'python $SNDSW_ROOT/shipLHC/run_simSND.py \
-        --Genie 4 \
-        -f {input.inputfile} \
-        --AdvSND \
-        -n {config[N]} \
-        -o sim_{config[neutrino_pid]}_{config[event_generator_list]}_{config[geo_id]}_{config[N]}'
 
-rule generate_mpl_xml:
+# Define the single target path based on your config
+rule all:
     input:
-        expand("geofile.{geo_id}.gdml", geo_id=config["geo_id"])
-    output:
-        "mpl.xml"
-    shell:
-        'gmxpl -f {input} -t "+{config[target]}" -L "cm" -D "g_cm3" -o {output} --message-thresholds $GENIE/config/Messenger_laconic.xml'
+        os.path.join(
+            eos_dir,
+            f"sim_{neutrino_pid}_{event_generator_list}_{geo_id}_{N}",
+            "sndLHC.Genie-TGeant4.root"
+        )
 
 rule make_geofile:
     output:
-        expand("geofile.{geo_id}.root", geo_id=config["geo_id"])
+        os.path.join(eos_dir, f"geofile.{geo_id}.root")
     shell:
-        "python $SNDSW_ROOT/shipLHC/makeGeoFile.py -c $SNDSW_ROOT/geometry/AdvSND_geom_config.py -g {output}"
+        "python $ADVSNDSW_ROOT/shipLHC/makeGeoFile.py -c $ADVSNDSW_ROOT/geometry/AdvSND_geom_config.py -g {output}"
 
 rule convert_geofile:
     input:
-        "{name}.root"
+        os.path.join(eos_dir, f"geofile.{geo_id}.root")
     output:
-        "{name}.gdml"
+        os.path.join(eos_dir, f"geofile.{geo_id}.gdml")
     shell:
         "python gdml_convert.py -i {input} -o {output}"
+
+rule generate_mpl_xml:
+    input:
+        os.path.join(eos_dir, f"geofile.{geo_id}.gdml")
+    output:
+        os.path.join(eos_dir, "mpl.xml")
+    shell:
+        "gmxpl -f {input} -t \"+{target}\" -L \"cm\" -D \"g_cm3\" -o {output} --message-thresholds $GENIE/config/Messenger_laconic.xml"
+
+
+rule generate_input_file:
+    input:
+        # your four inputs
+        gdml    = os.path.join(eos_dir, f"geofile.{geo_id}.gdml"),
+        xs      = "/afs/cern.ch/work/d/dannc/public/AdvSND/2024/splines/genie_splines_GENIE_v32_ADVSNDG18_02a_01_000_2_plus2.xml",
+        header  = "/eos/experiment/sndlhc/users/ursovsnd/genie_input/20b_no_bias.gsimple.root",
+        auxxml  = "/afs/cern.ch/work/d/dannc/public/AdvSND/2024/auxiliary/mympl_plus.xml"
+
+    output:
+        # f-string injects eos_dir, but {target}, {N}, etc. remain wildcards
+        os.path.join(
+            eos_dir,
+            "sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.ghep.root"
+        )
+
+    params:
+        # now that wildcards are defined, strip off the ".ghep.root" suffix to get the GENIE prefix
+        prefix=lambda wildcards, output: output[0][:-len(".0.ghep.root")]
+
+    shell:
+        """
+        gevgen_fnal \
+          -f "{input.header},,-{wildcards.neutrino_pid},{wildcards.neutrino_pid}" \
+          -g {input.gdml} \
+          -t "+{wildcards.target}" \
+          -L cm -D g_cm3 \
+          -n {wildcards.N} \
+          -o {params.prefix} \
+          --tune SNDG18_02a_01_000 \
+          --cross-sections {input.xs} \
+          --message-thresholds $GENIE/config/Messenger_laconic.xml -z -3 \
+          --event-generator-list {wildcards.event_generator_list} \
+          -m {input.auxxml}
+        """
+
+rule convert_ghep_gst:
+    input:
+        os.path.join(
+            eos_dir,
+            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.ghep.root"
+        )
+    output:
+        os.path.join(
+            eos_dir,
+            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.gst.root"
+        )
+    log:
+        os.path.join(
+            eos_dir,
+            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.gst.log"
+        )
+    shell:
+        "gntpc -i {input} -f gst -o {output} -c"
+
+rule add_auxiliary_to_gst:
+    input:
+        gst=os.path.join(
+            eos_dir,
+            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.gst.root"
+        ),
+        ghep=os.path.join(
+            eos_dir,
+            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.ghep.root"
+        )
+    output:
+        os.path.join(
+            eos_dir,
+            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0_aux.gst.root"
+        )
+    log:
+        os.path.join(
+            eos_dir,
+            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0_aux.gst.log"
+        )
+    shell:
+        "cp {input.gst} {output} && addAuxiliaryToGST {input.ghep} {input.gst}"
+
+rule run_sim:
+    input:
+        os.path.join(
+            eos_dir,
+            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0_aux.gst.root"
+        )
+    output:
+        os.path.join(
+            eos_dir,
+            f"sim_{neutrino_pid}_{event_generator_list}_{geo_id}_{N}",
+            "sndLHC.Genie-TGeant4.root"
+        )
+    shell:
+        "python $ADVSNDSW_ROOT/shipLHC/run_simSND.py --Genie 4 -f {input} --AdvSND -n {N} -o {output}"
+

@@ -1,16 +1,29 @@
 executable            = transport_neutrinos.sh
-NEVENTS = 100000
-NJOBS = 1000
+#NEVENTS = 500000
+#NJOBS = 1000
 NEVENTSPERJOB = $(NEVENTS) / $(NJOBS)
-arguments             = $(ProcId) sndlhc_+volAdvTarget_$INT(NEVENTSPERJOB)_ADVSNDG18_02a_01_000.0.gst.root $INT(NEVENTSPERJOB)
-output                = logs/transport_neutrinos.$(ClusterId).$(ProcId).out
-error                 = logs/transport_neutrinos.$(ClusterId).$(ProcId).err
-log                   = logs/transport_neutrinos.$(ClusterId).log
+# ----- automatic retry logic -----
+# Consider exit‑code 0 a success…
+success_exit_code = 0
+# …otherwise retry up to 5 times
+max_retries       = 3
+# (optional) stop retrying if we hit a specific exit code
+# retry_until      = !member(ExitCode,{2,13,42})
+# ---------------------------------
+
+#arguments             = $(ProcId) sndlhc_+$(TOPVOL)_SND_LHC_SNDG18_02a_01_000.0.gst.root $INT(NEVENTSPERJOB) 
+#arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(YEAR)
+arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR)
+#CONDOR_FOLDER=/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new
+output                = ./logs/transport_neutrinos.$(ClusterId).$(ProcId).out
+error                 = ./logs/transport_neutrinos.$(ClusterId).$(ProcId).err
+log                   = ./logs/transport_neutrinos.$(ClusterId).$(ProcId).log
+
 getenv = False
 notification = Never
 transfer_output_files = ""
 RequestCpus = 1
 requirements = (OpSysAndVer =?= "AlmaLinux9")
-+JobFlavour             ="tomorrow"
++JobFlavour             ="workday"
 +AccountingGroup = "group_u_SNDLHC.users"
 queue $(NJOBS)
