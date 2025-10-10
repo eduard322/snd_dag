@@ -19,7 +19,7 @@ arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUT
 output                = ./logs/digitise.$(ClusterId).$(ProcId).out
 error                 = ./logs/digitise.$(ClusterId).$(ProcId).err
 log                   = ./logs/digitise.$(ClusterId).$(ProcId).log
-
+MY.SendCredential = True
 getenv = False
 transfer_output_files = ""
 notification = Never

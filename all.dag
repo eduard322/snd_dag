@@ -1,13 +1,16 @@
-VARS ALL_NODES TAG="2025/03_test_low_CC_no_logs_new_dag" NEVENTS="100" TOPVOL="volMuFilter" NEUTRINO="14" EVENTGENLIST="CC"  NJOBS="10" COLNUM="1.1715e13" CONDOR_FOLDER="/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag" YEAR="2024"
-Job generate_input_file generate_input_file.sub
-Job transport_neutrinos transport_neutrinos.sub
-Job digitise digitise.sub
-DOT dag.dot UPDATE
-
-#Parent generate_input_file Child convert_ghep_gst
-Parent generate_input_file Child transport_neutrinos
-#Parent convert_ghep_gst Child transport_neutrinos
-Parent transport_neutrinos Child digitise
-
-
-PRE_SKIP ALL_NODES 2
+# BEGIN META
+DOT dag.dot UPDATE OVERWRITE
+# END META
+# BEGIN NODES AND EDGES
+JOB generate_input_file:0 /afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag/generate_input_file.sub DIR /afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag
+VARS generate_input_file:0 TAG="2024/low_stat_01" NEVENTS="100" TOPVOL="volTarget" NEUTRINO="14" EVENTGENLIST="NC" NJOBS="10" COLNUM="1.1715e13" CONDOR_FOLDER="/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag" YEAR="2024" TUNE="SNDG18_02a_01_000" OUTPUTDIR="/eos/experiment/sndlhc/users/ursovsnd/neutrino_production_sndlhc_june_2025"
+PRE_SKIP generate_input_file:0 2
+PARENT generate_input_file:0 CHILD transport_neutrinos:0
+JOB transport_neutrinos:0 /afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag/transport_neutrinos.sub DIR /afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag
+VARS transport_neutrinos:0 TAG="2024/low_stat_01" NEVENTS="100" TOPVOL="volTarget" NEUTRINO="14" EVENTGENLIST="NC" NJOBS="10" COLNUM="1.1715e13" CONDOR_FOLDER="/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag" YEAR="2024" TUNE="SNDG18_02a_01_000" OUTPUTDIR="/eos/experiment/sndlhc/users/ursovsnd/neutrino_production_sndlhc_june_2025"
+PRE_SKIP transport_neutrinos:0 2
+PARENT transport_neutrinos:0 CHILD digitise:0
+JOB digitise:0 /afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag/digitise.sub DIR /afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag
+VARS digitise:0 TAG="2024/low_stat_01" NEVENTS="100" TOPVOL="volTarget" NEUTRINO="14" EVENTGENLIST="NC" NJOBS="10" COLNUM="1.1715e13" CONDOR_FOLDER="/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag" YEAR="2024" TUNE="SNDG18_02a_01_000" OUTPUTDIR="/eos/experiment/sndlhc/users/ursovsnd/neutrino_production_sndlhc_june_2025"
+PRE_SKIP digitise:0 2
+# END NODES AND EDGES

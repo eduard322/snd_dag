@@ -9,16 +9,17 @@ except Exception:
     from htcondor2 import dags  # fallback for newer installs
 
 
-# "TOPVOL": "volMuFilter"
+# "TOPVOL": "volMuFilter", "volTarget"
+# 1000 jobs * 1.1715e14 = 1500 fb-1
 # ---- user knobs (from your DAG) ----
 VARS = {
-    "TAG": "2024/sndlhc_1500fb-1_NC_1",
+    "TAG": "2024/low_stat_01",
     "NEVENTS": "100",
     "TOPVOL": "volTarget",
     "NEUTRINO": "14",
     "EVENTGENLIST": "NC",
-    "NJOBS": "1000",
-    "COLNUM": "1.1715e14",
+    "NJOBS": "10",
+    "COLNUM": "1.1715e13",
     "CONDOR_FOLDER": "/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag",
     "YEAR": "2024",
     "TUNE": "SNDG18_02a_01_000",

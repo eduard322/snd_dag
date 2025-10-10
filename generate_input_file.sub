@@ -23,7 +23,7 @@ max_retries       = 3
 
 stream_output = False
 
-
+MY.SendCredential = True
 #getenv = False
 getenv = True
 #should_transfer_files = NO

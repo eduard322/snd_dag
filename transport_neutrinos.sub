@@ -18,7 +18,7 @@ arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUT
 output                = ./logs/transport_neutrinos.$(ClusterId).$(ProcId).out
 error                 = ./logs/transport_neutrinos.$(ClusterId).$(ProcId).err
 log                   = ./logs/transport_neutrinos.$(ClusterId).$(ProcId).log
-
+MY.SendCredential = True
 getenv = False
 notification = Never
 transfer_output_files = ""
