@@ -1,0 +1,7 @@
+neutrino_pid: 16
+event_generator_list: CCDIS
+geo_id: tp_geo
+N: 1
+target: volAdvTarget
+eos_dir: /eos/user/u/ursovsnd/snake_out
+
