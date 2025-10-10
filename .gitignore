@@ -1,0 +1,5 @@
+logs/*
+all.dag.*
+*DAGMAN*
+all*
+*dag*
