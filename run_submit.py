@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import htcondor
+import os
+import shutil
 
 # API name changed in newer releases (htcondor2). Try the current one first.
 try:
@@ -13,13 +15,13 @@ except Exception:
 # 1000 jobs * 1.1715e14 = 1500 fb-1
 # ---- user knobs (from your DAG) ----
 VARS = {
-    "TAG": "2024/low_stat_01",
+    "TAG": "2024/sndlhc_1500fb-1_NC_1",
     "NEVENTS": "100",
-    "TOPVOL": "volTarget",
-    "NEUTRINO": "14",
+    "TOPVOL": "volMuFilter",
+    "NEUTRINO": "12",
     "EVENTGENLIST": "NC",
-    "NJOBS": "10",
-    "COLNUM": "1.1715e13",
+    "NJOBS": "1000",
+    "COLNUM": "1.1715e14",
     "CONDOR_FOLDER": "/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag",
     "YEAR": "2024",
     "TUNE": "SNDG18_02a_01_000",
@@ -30,7 +32,19 @@ DAG_NAME = "all.dag"
 DOT_PATH = "dag.dot"
 
 base = Path(VARS["CONDOR_FOLDER"]).resolve()
+tag_suffix = VARS["TAG"].split("/")[-1]
+dag_dir = base / f"dag_{tag_suffix}"
 
+# CLEAN first, then recreate dag_dir
+shutil.rmtree(dag_dir, ignore_errors=True)
+dag_dir.mkdir(parents=True, exist_ok=True)
+
+#print(f"Creating a dag directory dag_{VARS['TAG'].split('/')[-1]}...")
+#dag_dir = base / f"dag_{VARS['TAG'].split('/')[-1]}"
+#dag_dir.mkdir(parents=True, exist_ok=True)
+
+#DAG_NAME =  dag_dir / DAG_NAME
+#DOT_PATH =  dag_dir / DOT_PATH
 # Point to your existing submit files on disk (we reuse them as-is)
 sub_generate  = base / "generate_input_file.sub"
 sub_transport = base / "transport_neutrinos.sub"
@@ -66,20 +80,39 @@ dig = trn.child_layer(
     dir=base,
     pre_skip_exit_code=PRE_SKIP_CODE,
 )
+print(dag.describe())
 
-# Write DAG description (and any generated submit files if you had htcondor.Submit objects)
-dagfile_path = dags.write_dag(dag, dag_dir=base, dag_file_name=DAG_NAME)
-print(f"Wrote DAG to: {dagfile_path}")
+# blow away any old files
+#shutil.rmtree(dag_dir, ignore_errors = True)
 
+# make the magic happen!
+#dag_file = dags.write_dag(dag, dag_dir, dag_file_name=DAG_NAME)
+#dag_submit = htcondor.Submit.from_dag(str(dag_file), {'force': 1})
+
+#print(dag_submit)
+
+#os.chdir(dag_dir)
+
+#schedd = htcondor.Schedd()
+#cluster_id = schedd.submit(dag_submit).cluster()
+
+#print(f"DAGMan job cluster is {cluster_id}")
+
+#os.chdir('..')
+
+dag_file = dags.write_dag(dag, dag_dir=dag_dir, dag_file_name=DAG_NAME)
+
+# Change cwd BEFORE building the Submit from the DAG (mimics condor_submit_dag)
+os.chdir(dag_dir)
+
+dag_submit = htcondor.Submit.from_dag(str(dag_file))
+# Optional: if you use Kerberos creds
+# Push your Kerberos ticket to the credd (uses your current kinit cache)
+credd = htcondor.Credd()
+credd.add_user_cred(htcondor.CredTypes.Kerberos, None)
+dag_submit["MY.SendCredential"] = "True"
+dag_submit["getenv"] = "True"
 schedd = htcondor.Schedd()
-submit_desc = htcondor.Submit.from_dag(str(dagfile_path))
-
-# --- New API: use Schedd.submit() ---
-res = schedd.submit(submit_desc)  # replaces transaction()+queue()
-# Make this robust across versions (SubmitResult vs int)
-try:
-    cluster_id = res.cluster()
-except AttributeError:
-    cluster_id = int(res)
-
-print(f"Submitted DAGMan job: cluster {cluster_id}")
+res = schedd.submit(dag_submit)
+cluster_id = getattr(res, "cluster", lambda: int(res))()
+print(f"DAGMan job cluster is {cluster_id}")
