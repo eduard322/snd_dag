@@ -4,3 +4,4 @@ all.dag.*
 all*
 *dag*
 dag_*
+*.cc
