@@ -12,9 +12,13 @@ Files to run SND@LHC and AdvSND neutrino simulation (and maybe other simulations
 
 ## How to run
 
-* Run all steps (skip completed steps): `condor_submit_dag all.dag`
-* Run a particular step: `condor_submit <step>.sub`
-* Check how many output files exist: `./check_files <step>` (used by the DAG to skip completed steps)
+* `run_submit.py` creates the HTCondor DAG instruction with a lot of options. See the possible keys in the script.
+* To set up parameters, check `config.sh` file where one has to change the path to the folder of `sndsw` that one has on their system.
+* `python run_submit.py`
+
+## Verifying the number of files
+
+* `ls -la $OUTPUT_FOLDER$/nu12/volume_volMuFilter/*/sndLHC.Genie-TGeant4_dig.root | wc -l`
 
 ## Current limitations
 
