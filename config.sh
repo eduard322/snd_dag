@@ -7,13 +7,13 @@ eval $(alienv load sndsw/latest --work-dir /afs/cern.ch/user/u/ursovsnd/SND/sw  
 
 
 #OUTPUTDIR=/eos/experiment/sndlhc/users/ursovsnd/neutrino_production_sndlhc_june_2025
-OUTPUTDIR=${11}
+OUTPUTDIR=${12}
 TUNE=${10}
 
 #TUNE=SNDG18_02a_01_000
 XSECTION="/eos/experiment/sndlhc/MonteCarlo/Neutrinos/Genie/splines/genie_splines_GENIE_v32_SNDG18_02a_01_000.xml"
-FLUX="/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/ALL_lhc_ir1_coll_2024_1p585mm_xrp_exp001_fort.30.gsimple.root"
-
+#FLUX="/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/ALL_lhc_ir1_coll_2024_1p585mm_xrp_exp001_fort.30.gsimple.root"
+FLUX=${11}
 
 
 

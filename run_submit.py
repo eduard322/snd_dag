@@ -13,18 +13,21 @@ except Exception:
 
 # "TOPVOL": "volMuFilter", "volTarget"
 # 1000 jobs * 1.1715e14 = 1500 fb-1
+# BEWARE: CURRENT SETUP IS TUNED TO SIMULATE THE NUMBER EVENTS THAT CORRESPOND TO THE EXPECTED LUMINOSITY: GENIE SAMPLES THIS NUMBER ACCORDING TO THE COLLISION NUMBER
+# AND FLUKA FILE YOU ENTER AS AN INPUT. IF YOU WANT TO SIMULATE THE EXACT NUMBER OF EVENTS, CHECK generate_input_file.sh script.
 # ---- user knobs (from your DAG) ----
 VARS = {
-    "TAG": "2024/sndlhc_1500fb-1_NC_1",
+    "TAG": "2024/sndlhc_1500fb-1_CC_fixed_flux",
     "NEVENTS": "100",
     "TOPVOL": "volMuFilter",
     "NEUTRINO": "12",
-    "EVENTGENLIST": "NC",
-    "NJOBS": "1000",
-    "COLNUM": "1.1715e14",
+    "EVENTGENLIST": "CC",
+    "NJOBS": "100",
+    "COLNUM": "1.1715e15",
     "CONDOR_FOLDER": "/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag",
     "YEAR": "2024",
     "TUNE": "SNDG18_02a_01_000",
+    "FLUKAFLUX": "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/ALL_lhc_ir1_coll_2024_1p585mm_xrp_exp001_fort.30_FIXED.gsimple.root",
     "OUTPUTDIR": "/eos/experiment/sndlhc/users/ursovsnd/neutrino_production_sndlhc_june_2025"
 }
 PRE_SKIP_CODE = 2
@@ -33,7 +36,7 @@ DOT_PATH = "dag.dot"
 
 base = Path(VARS["CONDOR_FOLDER"]).resolve()
 tag_suffix = VARS["TAG"].split("/")[-1]
-dag_dir = base / f"dag_{tag_suffix}"
+dag_dir = base / f"dag_{tag_suffix}" / VARS["TOPVOL"]
 
 # CLEAN first, then recreate dag_dir
 shutil.rmtree(dag_dir, ignore_errors=True)

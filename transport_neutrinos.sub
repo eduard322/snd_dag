@@ -13,7 +13,7 @@ max_retries       = 3
 
 #arguments             = $(ProcId) sndlhc_+$(TOPVOL)_SND_LHC_SNDG18_02a_01_000.0.gst.root $INT(NEVENTSPERJOB) 
 #arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(YEAR)
-arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(OUTPUTDIR)
+arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR)
 #CONDOR_FOLDER=/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new
 output                = ./logs/transport_neutrinos.$(ClusterId).$(ProcId).out
 error                 = ./logs/transport_neutrinos.$(ClusterId).$(ProcId).err
