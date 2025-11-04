@@ -153,7 +153,7 @@ def write_readme(vars_dict: dict) -> None:
     pdg = vars_dict["NEUTRINO"]
     topvol = vars_dict["TOPVOL"]
 
-    out_dir = output_base / tag / pdg / topvol
+    out_dir = output_base / tag / f"nu{pdg}" / f"volume_{topvol}"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # Map to template-style variable names
