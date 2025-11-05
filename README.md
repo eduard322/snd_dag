@@ -14,7 +14,7 @@ Files to run SND@LHC and AdvSND neutrino simulation (and maybe other simulations
 
 * `run_submit.py` creates the HTCondor DAG instruction with a lot of options. See the possible keys in the script.
 * To set up parameters, check `config.sh` file where one has to change the path to the folder of `sndsw` that one has on their system.
-* `python run_submit.py`
+* `python run_submit.py` or more info: `python3 run_submit.py --tag 2022/sndlhc_1500fb-1_up --topvol volMuFilter --neutrino 14 --year 2022 --flukaflux /eos/experiment/sndlhc/MonteCarlo/FLUKA/neutrino_up_13TeV/all13TeVK0_gsimple.root`
 
 ## Verifying the number of files
 

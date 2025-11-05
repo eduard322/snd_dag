@@ -193,7 +193,8 @@ DOT_PATH = "dag.dot"
 
 base = Path(VARS["CONDOR_FOLDER"]).resolve()
 tag_suffix = VARS["TAG"].split("/")[-1]
-dag_dir = base / f"dag_{tag_suffix}" / VARS["TOPVOL"]
+neutrino = VARS["NEUTRINO"]
+dag_dir = base / f"dag_{tag_suffix}" / f"nu{neutrino}" / VARS["TOPVOL"]
 
 # CLEAN first, then recreate dag_dir
 shutil.rmtree(dag_dir, ignore_errors=True)
