@@ -1,5 +1,3 @@
-ADVSNDBUILD_DIR="/afs/cern.ch/user/u/ursovsnd/SND"
-
 # Environment setup
 source /cvmfs/sndlhc.cern.ch/SNDLHC-2025/Jan30/setUp.sh
 eval "$(alienv load sndsw/latest --work-dir ${15} --no-refresh)"
