@@ -36,7 +36,6 @@ gevgen_fnal -f "$FLUX,,-$NEUTRINO,$NEUTRINO" \
     --message-thresholds $GENIE/config/Messenger_laconic.xml \
     --seed $SEED
     #-z -3 \
-    #--event-generator-list $EVENTGENLIST \
     #-m $MPL
 
 OUTPUTGST=$(basename $OUTPUTFILE_GEN .ghep.root).gst.root

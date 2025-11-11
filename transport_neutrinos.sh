@@ -2,37 +2,16 @@
 set -o errexit -o pipefail -o noclobber
 
 # Set up SND environment
-#source /afs/cern.ch/user/o/olantwin/SND/nusim_automation/config.sh
-#source /afs/cern.ch/user/u/ursovsnd/neutrino/pythia_flux/nusim_automation/config.sh
-#source /afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag/config.sh
 
 source $8/config.sh "$@"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/cvmfs/sndlhc.cern.ch/SNDLHC-2023/Aug30//sw//slc9_x86-64/pythia/sndsw-pythia8309-local1/lib
 
 set -o nounset
 
-#OUTPUTFILE=sndLHC.Genie-TGeant4.root
-
-
 
 INPUT=$INPUTFILE_TRANSP
 ProcId=$1
 LSB_JOBINDEX=$((ProcId+1))
-
-#OUTPUTDIR=/eos/experiment/sndlhc/users/olantwin/advsnd/$OUTPUT_PREFIX/$LSB_JOBINDEX
-#OUTPUTDIR=/eos/experiment/sndlhc/users/ursovsnd/advsnd/$OUTPUT_PREFIX/$LSB_JOBINDEX
-#OUTPUTDIR=/eos/experiment/sndlhc/users/ursovsnd/neutrino_production_sndlhc_june_2025/$OUTPUT_PREFIX/$LSB_JOBINDEX
-
-# NEUTRINO=$6
-# TAG=$7
-# OUTPUT_PREFIX=$TAG/nu$NEUTRINO/volume_$4
-# OUTPUTDIR=$OUTPUTDIR/$OUTPUT_PREFIX/$LSB_JOBINDEX
-# INPUT=sndlhc_+$4_SND_LHC_SNDG18_02a_01_000.0.gst.root
-
-#!/usr/bin/env bash
-# usage: source check_auto_event_counter.sh input.root
-
-#NEVENTS=$N
 
 set -x
 

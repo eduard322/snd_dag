@@ -116,8 +116,153 @@ def parse_args() -> argparse.Namespace:
         ),
         help="Base EOS output directory (OUTPUTDIR).",
     )
+    parser.add_argument(
+        "--geofile",
+        type=Path,
+        default=Path(
+            "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/"
+            "output_geo_geant.gdml"
+        ),
+        help="Base gmdl geometry file (GEOFILE).",
+    )
+
 
     return parser.parse_args()
+
+
+import argparse
+from pathlib import Path
+import yaml
+
+
+def parse_args(argv=None) -> argparse.Namespace:
+    # --- Stage 1: parse only --yaml so we know if we should load a config file ---
+    base = argparse.ArgumentParser(add_help=False)
+    base.add_argument(
+        "--yaml",
+        type=Path,
+        help="YAML file with default arguments (CLI overrides YAML).",
+    )
+    base_args, remaining = base.parse_known_args(argv)
+
+    yaml_cfg = {}
+    if base_args.yaml is not None:
+        with base_args.yaml.open() as f:
+            yaml_cfg = yaml.safe_load(f) or {}
+
+    # Helper to get value from YAML or fall back to given default
+    def yget(key, default):
+        return yaml_cfg.get(key, default)
+
+    def ypath(key, default: Path) -> Path:
+        if key in yaml_cfg and yaml_cfg[key] is not None:
+            return Path(yaml_cfg[key])
+        return default
+
+    # --- Stage 2: full parser, seeded with YAML-aware defaults ---
+    parser = argparse.ArgumentParser(
+        description="Configure SND@LHC neutrino production HTCondor DAG submission.",
+        parents=[base],
+    )
+
+    parser.add_argument(
+        "--tag",
+        default=yget("tag", "2024/sndlhc_1500fb-1_fixed_flux"),
+        help="Tag used to label this production (stored under TAG).",
+    )
+    parser.add_argument(
+        "--nevents",
+        type=int,
+        default=yget("nevents", 100),
+        help="Number of events per job (NEVENTS).",
+    )
+    parser.add_argument(
+        "--topvol",
+        default=yget("topvol", "volMuFilter"),
+        choices=["volMuFilter", "volTarget"],
+        help="Top volume where neutrino interactions are generated (TOPVOL).",
+    )
+    parser.add_argument(
+        "--neutrino",
+        type=int,
+        default=yget("neutrino", 12),
+        help="Neutrino PDG code (NEUTRINO).",
+    )
+    parser.add_argument(
+        "--eventgenlist",
+        default=yget("eventgenlist", "Default"),
+        help="GENIE event generator list (EVENTGENLIST).",
+    )
+    parser.add_argument(
+        "--njobs",
+        type=int,
+        default=yget("njobs", 100),
+        help="Number of Condor jobs to submit (NJOBS).",
+    )
+    parser.add_argument(
+        "--colnum",
+        type=float,
+        default=yget("colnum", 1.1715e15),
+        help="Number of pp collisions to normalize to (COLNUM).",
+    )
+    parser.add_argument(
+        "--condor-folder",
+        dest="condor_folder",
+        default=yget(
+            "condor_folder",
+            "/afs/cern.ch/user/u/ursovsnd/neutrino/"
+            "neutrino_production_sndlhc_june_2025/nusim_automation_new_dag",
+        ),
+        help="Folder where Condor/DAG files are written (CONDOR_FOLDER).",
+    )
+    parser.add_argument(
+        "--year",
+        default=yget("year", "2024"),
+        help="Data-taking year (YEAR).",
+    )
+    parser.add_argument(
+        "--tune",
+        default=yget("tune", "SNDG18_02a_01_000"),
+        help="GENIE tune name (TUNE).",
+    )
+    parser.add_argument(
+        "--flukaflux",
+        type=Path,
+        default=ypath(
+            "flukaflux",
+            Path(
+                "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/"
+                "ALL_lhc_ir1_coll_2024_1p585mm_xrp_exp001_fort.30_FIXED.gsimple.root"
+            ),
+        ),
+        help="Input FLUKA/gsimple flux file (FLUKAFLUX).",
+    )
+    parser.add_argument(
+        "--outputdir",
+        type=Path,
+        default=ypath(
+            "outputdir",
+            Path(
+                "/eos/experiment/sndlhc/users/ursovsnd/"
+                "neutrino_production_sndlhc_june_2025"
+            ),
+        ),
+        help="Base EOS output directory (OUTPUTDIR).",
+    )
+    parser.add_argument(
+        "--geofile",
+        type=Path,
+        default=ypath(
+            "geofile",
+            Path(
+                "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/"
+                "output_geo_geant.gdml"
+            ),
+        ),
+        help="Base gmdl geometry file (GEOFILE).",
+    )
+
+    return parser.parse_args(remaining)
 
 
 def build_vars_from_args(args: argparse.Namespace) -> dict:
@@ -135,6 +280,7 @@ def build_vars_from_args(args: argparse.Namespace) -> dict:
         "TUNE": args.tune,
         "FLUKAFLUX": str(args.flukaflux),
         "OUTPUTDIR": str(args.outputdir),
+        "GEOFILE": str(args.geofile),
     }
     return VARS
 
@@ -242,24 +388,6 @@ dig = trn.child_layer(
     pre_skip_exit_code=PRE_SKIP_CODE,
 )
 print(dag.describe())
-
-# blow away any old files
-#shutil.rmtree(dag_dir, ignore_errors = True)
-
-# make the magic happen!
-#dag_file = dags.write_dag(dag, dag_dir, dag_file_name=DAG_NAME)
-#dag_submit = htcondor.Submit.from_dag(str(dag_file), {'force': 1})
-
-#print(dag_submit)
-
-#os.chdir(dag_dir)
-
-#schedd = htcondor.Schedd()
-#cluster_id = schedd.submit(dag_submit).cluster()
-
-#print(f"DAGMan job cluster is {cluster_id}")
-
-#os.chdir('..')
 
 dag_file = dags.write_dag(dag, dag_dir=dag_dir, dag_file_name=DAG_NAME)
 

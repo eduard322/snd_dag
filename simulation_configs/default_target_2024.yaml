@@ -1,0 +1,13 @@
+tag: "tests/sndlhc_1500fb-1_fixed_flux"
+nevents: 100
+topvol: "volTarget"
+neutrino: 12
+eventgenlist: "Default"
+njobs: 100
+colnum: 1.1715e15
+condor_folder: "/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag"
+year: "2022"
+tune: "SNDG18_02a_01_000"
+flukaflux: "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/ALL_lhc_ir1_coll_2024_1p585mm_xrp_exp001_fort.30_FIXED.gsimple.root"
+outputdir: "/eos/experiment/sndlhc/users/ursovsnd/neutrino_production_sndlhc_june_2025"
+geofile: "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/output_geo_geant_2022.gdml"
