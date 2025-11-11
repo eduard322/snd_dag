@@ -11,129 +11,22 @@ except Exception:
     from htcondor2 import dags  # fallback for newer installs
 
 
-# "TOPVOL": "volMuFilter", "volTarget"
-# 1000 jobs * 1.1715e14 = 1500 fb-1
-# BEWARE: CURRENT SETUP IS TUNED TO SIMULATE THE NUMBER EVENTS THAT CORRESPOND TO THE EXPECTED LUMINOSITY: GENIE SAMPLES THIS NUMBER ACCORDING TO THE COLLISION NUMBER
-# AND FLUKA FILE YOU ENTER AS AN INPUT. IF YOU WANT TO SIMULATE THE EXACT NUMBER OF EVENTS, CHECK generate_input_file.sh script.
-# ---- user knobs (from your DAG) ----
-# VARS = {
-#     "TAG": "2024/sndlhc_1500fb-1_CC_fixed_flux",
-#     "NEVENTS": "100",
-#     "TOPVOL": "volMuFilter",
-#     "NEUTRINO": "12",
-#     "EVENTGENLIST": "CC",
-#     "NJOBS": "100",
-#     "COLNUM": "1.1715e15",
-#     "CONDOR_FOLDER": "/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag",
-#     "YEAR": "2024",
-#     "TUNE": "SNDG18_02a_01_000",
-#     "FLUKAFLUX": "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/ALL_lhc_ir1_coll_2024_1p585mm_xrp_exp001_fort.30_FIXED.gsimple.root",
-#     "OUTPUTDIR": "/eos/experiment/sndlhc/users/ursovsnd/neutrino_production_sndlhc_june_2025"
-# }
-
-
-import argparse
-from pathlib import Path
-
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Configure SND@LHC neutrino production HTCondor DAG submission."
-    )
-
-    parser.add_argument(
-        "--tag",
-        default="2024/sndlhc_1500fb-1_fixed_flux",
-        help="Tag used to label this production (stored under TAG).",
-    )
-    parser.add_argument(
-        "--nevents",
-        type=int,
-        default=100,
-        help="Number of events per job (NEVENTS).",
-    )
-    parser.add_argument(
-        "--topvol",
-        default="volMuFilter",
-        choices=["volMuFilter", "volTarget"],
-        help="Top volume where neutrino interactions are generated (TOPVOL).",
-    )
-    parser.add_argument(
-        "--neutrino",
-        type=int,
-        default=12,
-        help="Neutrino PDG code (NEUTRINO).",
-    )
-    parser.add_argument(
-        "--eventgenlist",
-        default="Default",
-        help="GENIE event generator list (EVENTGENLIST).",
-    )
-    parser.add_argument(
-        "--njobs",
-        type=int,
-        default=100,
-        help="Number of Condor jobs to submit (NJOBS).",
-    )
-    parser.add_argument(
-        "--colnum",
-        type=float,
-        default=1.1715e15,
-        help="Number of pp collisions to normalize to (COLNUM).",
-    )
-    parser.add_argument(
-        "--condor-folder",
-        default=(
-            "/afs/cern.ch/user/u/ursovsnd/neutrino/"
-            "neutrino_production_sndlhc_june_2025/nusim_automation_new_dag"
-        ),
-        help="Folder where Condor/DAG files are written (CONDOR_FOLDER).",
-    )
-    parser.add_argument(
-        "--year",
-        default="2024",
-        help="Data-taking year (YEAR).",
-    )
-    parser.add_argument(
-        "--tune",
-        default="SNDG18_02a_01_000",
-        help="GENIE tune name (TUNE).",
-    )
-    parser.add_argument(
-        "--flukaflux",
-        type=Path,
-        default=Path(
-            "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/"
-            "ALL_lhc_ir1_coll_2024_1p585mm_xrp_exp001_fort.30_FIXED.gsimple.root"
-        ),
-        help="Input FLUKA/gsimple flux file (FLUKAFLUX).",
-    )
-    parser.add_argument(
-        "--outputdir",
-        type=Path,
-        default=Path(
-            "/eos/experiment/sndlhc/users/ursovsnd/"
-            "neutrino_production_sndlhc_june_2025"
-        ),
-        help="Base EOS output directory (OUTPUTDIR).",
-    )
-    parser.add_argument(
-        "--geofile",
-        type=Path,
-        default=Path(
-            "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/"
-            "output_geo_geant.gdml"
-        ),
-        help="Base gmdl geometry file (GEOFILE).",
-    )
-
-
-    return parser.parse_args()
-
-
 import argparse
 from pathlib import Path
 import yaml
 
+import os
+
+sndsw_dir = os.getenv("SNDSW_DIR")
+if not sndsw_dir:  # None or empty string
+    raise RuntimeError(
+        "Environment variable SNDSW_DIR is not set or empty. "
+        "Please source the SND@LHC environment before running this script."
+    )
+condor_dir = os.getenv("CONDOR_FOLDER")
+if not condor_dir:  # None or empty string
+    print("CONDOR_FOLDER is not set, using the current folder...")
+    condor_dir = Path.cwd()
 
 def parse_args(argv=None) -> argparse.Namespace:
     # --- Stage 1: parse only --yaml so we know if we should load a config file ---
@@ -206,16 +99,6 @@ def parse_args(argv=None) -> argparse.Namespace:
         help="Number of pp collisions to normalize to (COLNUM).",
     )
     parser.add_argument(
-        "--condor-folder",
-        dest="condor_folder",
-        default=yget(
-            "condor_folder",
-            "/afs/cern.ch/user/u/ursovsnd/neutrino/"
-            "neutrino_production_sndlhc_june_2025/nusim_automation_new_dag",
-        ),
-        help="Folder where Condor/DAG files are written (CONDOR_FOLDER).",
-    )
-    parser.add_argument(
         "--year",
         default=yget("year", "2024"),
         help="Data-taking year (YEAR).",
@@ -261,6 +144,20 @@ def parse_args(argv=None) -> argparse.Namespace:
         ),
         help="Base gmdl geometry file (GEOFILE).",
     )
+    parser.add_argument(
+        "--xsec",
+        type=Path,
+        default=ypath(
+            "xsec",
+            Path(
+                "/eos/experiment/sndlhc/MonteCarlo/Neutrinos/Genie/splines/"
+                "genie_splines_GENIE_v32_SNDG18_02a_01_000.xml"
+            ),
+        ),
+        help="GENIE splines (XSEC).",
+    )
+
+
 
     return parser.parse_args(remaining)
 
@@ -275,19 +172,22 @@ def build_vars_from_args(args: argparse.Namespace) -> dict:
         "EVENTGENLIST": args.eventgenlist,
         "NJOBS": str(args.njobs),
         "COLNUM": f"{args.colnum:.6g}",  # keep scientific notation if you like
-        "CONDOR_FOLDER": str(args.condor_folder),
         "YEAR": args.year,
         "TUNE": args.tune,
         "FLUKAFLUX": str(args.flukaflux),
         "OUTPUTDIR": str(args.outputdir),
         "GEOFILE": str(args.geofile),
+        "XSEC": str(args.xsec),
     }
     return VARS
 
 
 args = parse_args()
 VARS = build_vars_from_args(args)
-
+# add SNDSW_DIR to VARS
+VARS["SNDSW_DIR"] = str(sndsw_dir)
+# add CONDOR_FOLDER to VARS
+VARS["CONDOR_FOLDER"] = str(condor_dir)
 
 def write_readme(vars_dict: dict) -> None:
     """
@@ -320,7 +220,7 @@ def write_readme(vars_dict: dict) -> None:
 - year: {vars_dict["YEAR"]}
 - tune: {vars_dict["TUNE"]}
 - fluka_flux_file: {vars_dict["FLUKAFLUX"]}
-- condor_folder: {vars_dict["CONDOR_FOLDER"]}
+- GENIE spline file: {vars_dict["XSEC"]}
 - output_dir: {output_dir}
 - simulated luminosity: {expected_lumi} fb-1 (L = number_pp_collisions / sigma)
 """

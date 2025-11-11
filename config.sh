@@ -2,7 +2,7 @@ ADVSNDBUILD_DIR="/afs/cern.ch/user/u/ursovsnd/SND"
 
 # Environment setup
 source /cvmfs/sndlhc.cern.ch/SNDLHC-2025/Jan30/setUp.sh
-eval "$(alienv load sndsw/latest --work-dir /afs/cern.ch/user/u/ursovsnd/SND/sw --no-refresh)"
+eval "$(alienv load sndsw/latest --work-dir ${15} --no-refresh)"
 
 # Positional arguments
 ProcId="$1"
@@ -35,6 +35,6 @@ export FAIRSHIP="${FAIRSHIP_ROOT}"
 GEOFILE_GEANT4="geofile_full.Genie-TGeant4.root"
 
 # Cross-section and flux
-XSECTION="/eos/experiment/sndlhc/MonteCarlo/Neutrinos/Genie/splines/genie_splines_GENIE_v32_SNDG18_02a_01_000.xml"
+XSECTION="${14}"
 
 

@@ -7,3 +7,4 @@ dag_*
 *.cc
 *.root
 *.gdml
+system_config_dev.sh

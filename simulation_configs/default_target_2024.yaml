@@ -1,13 +1,14 @@
-tag: "tests/sndlhc_1500fb-1_fixed_flux"
-nevents: 100
-topvol: "volTarget"
-neutrino: 12
-eventgenlist: "Default"
+tag: "tests/sndlhc_1500fb-1_fixed_flux_1"
+nevents: 100 # deprecated, see collision number colnum
+topvol: "volTarget" # possible options: ["volTarget", "volMuFilter"]
+neutrino: 12 # includes also antineutrinos
+eventgenlist: "Default" # others are not recommended to use
 njobs: 100
-colnum: 1.1715e15
-condor_folder: "/afs/cern.ch/user/u/ursovsnd/neutrino/neutrino_production_sndlhc_june_2025/nusim_automation_new_dag"
-year: "2022"
-tune: "SNDG18_02a_01_000"
-flukaflux: "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/ALL_lhc_ir1_coll_2024_1p585mm_xrp_exp001_fort.30_FIXED.gsimple.root"
-outputdir: "/eos/experiment/sndlhc/users/ursovsnd/neutrino_production_sndlhc_june_2025"
-geofile: "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/output_geo_geant_2022.gdml"
+colnum: 1.1715e15 # corresponds to 15 fb-1
+year: "2024"
+tune: "SNDG18_02a_01_000" # change only if you know what you are doing
+flukaflux: "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/ALL_lhc_ir1_coll_2024_1p585mm_xrp_exp001_fort.30_FIXED.gsimple.root" # flux for LHC 2024 optics
+outputdir: "/eos/experiment/sndlhc/users/ursovsnd/neutrino_production_sndlhc_june_2025" # set output global dir, where the code will create tag dir with output
+geofile: "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/output_geo_geant.gdml" # created by create_geo_file.py
+xsec: "/eos/experiment/sndlhc/MonteCarlo/Neutrinos/Genie/splines/genie_splines_GENIE_v32_SNDG18_02a_01_000.xml" # change only if you know what you are doing
+
