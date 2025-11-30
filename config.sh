@@ -1,9 +1,29 @@
 # Environment setup
-source /cvmfs/sndlhc.cern.ch/SNDLHC-2025/Jan30/setUp.sh
-eval "$(alienv load sndsw/latest --work-dir ${15} --no-refresh)"
+
+
+ADV_VARIABLE=""
+if [ "${16}" = "True" ]; then
+  ADV_VARIABLE="adv"
+  #source /cvmfs/sndlhc.cern.ch/SNDLHC-2024/Jan30/setUp.sh
+  source /cvmfs/sndlhc.cern.ch/SNDLHC-2024/June25/setUp.sh
+else
+  #source /cvmfs/sndlhc.cern.ch/SNDLHC-2024/June25/setUp.sh
+  source /cvmfs/sndlhc.cern.ch/SNDLHC-2025/Jan30/setUp.sh
+fi
+
+eval "$(alienv load ${ADV_VARIABLE}sndsw/latest --work-dir "${15}" --no-refresh)"
+
+
+
+if [ "${16}" = "True" ]; then
+  SNDSW_ROOT=$ADVSNDSW_ROOT
+fi
+
+#eval "$(alienv load sndsw/latest --work-dir ${15} --no-refresh)"
 
 # Positional arguments
 ProcId="$1"
+NEVENTS="$2"
 COL_NUMBER="$3"
 NEUTRINO="$5"
 EVENTGENLIST="$6"

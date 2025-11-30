@@ -23,20 +23,83 @@ fi
 
 echo $SNDSW_ROOT
 
-gevgen_fnal -f "$FLUX,,-$NEUTRINO,$NEUTRINO" \
-    -g $GEOFILE \
-    -t $TOPVOLUME \
-    -L "cm" \
-    -D "g_cm3" \
-    -e $COL_NUMBER \
-    -o $(basename $OUTPUTFILE_GEN .0.ghep.root) \
-    --tune $TUNE \
-    --cross-sections $XSECTION \
-    --event-generator-list $EVENTGENLIST \
-    --message-thresholds $GENIE/config/Messenger_laconic.xml \
-    --seed $SEED
-    #-z -3 \
+#gevgen_fnal -f "$FLUX,,-$NEUTRINO,$NEUTRINO" \
+#    -g $GEOFILE \
+#    -t $TOPVOLUME \
+#    -L "cm" \
+#    -D "g_cm3" \
+#    -e $COL_NUMBER \
+#    -o $(basename $OUTPUTFILE_GEN .0.ghep.root) \
+#    --tune $TUNE \
+#    --cross-sections $XSECTION \
+#    --event-generator-list $EVENTGENLIST \
+#    --message-thresholds $GENIE/config/Messenger_laconic.xml \
+#    --seed $SEED
+#    #-z -3 \
     #-m $MPL
+
+
+# if [ "${NEVENTS:-0}" -eq 0 ]; then
+#   gevgen_fnal -f "$FLUX,,-$NEUTRINO,$NEUTRINO" \
+#       -g "$GEOFILE" \
+#       -t "$TOPVOLUME" \
+#       -L "cm" \
+#       -D "g_cm3" \
+#       -e "$COL_NUMBER" \
+#       -o "$(basename "$OUTPUTFILE_GEN" .0.ghep.root)" \
+#       --tune "$TUNE" \
+#       --cross-sections "$XSECTION" \
+#       --event-generator-list "$EVENTGENLIST" \
+#       --message-thresholds "$GENIE/config/Messenger_laconic.xml" \
+#       --seed "$SEED"
+# else
+#   gevgen_fnal -f "$FLUX,,-$NEUTRINO,$NEUTRINO" \
+#       -g "$GEOFILE" \
+#       -t "$TOPVOLUME" \
+#       -L "cm" \
+#       -D "g_cm3" \
+#       -n "$NEVENTS" \
+#       -o "$(basename "$OUTPUTFILE_GEN" .0.ghep.root)" \
+#       --tune "$TUNE" \
+#       --cross-sections "$XSECTION" \
+#       --event-generator-list "$EVENTGENLIST" \
+#       --message-thresholds "$GENIE/config/Messenger_laconic.xml" \
+#       --seed "$SEED"
+# fi
+
+Z_FLAG=""
+if [ "${16}" = "True" ]; then
+  Z_FLAG="-z 0"
+fi
+
+if [ "${NEVENTS:-0}" -eq 0 ]; then
+  gevgen_fnal -f "$FLUX,,-$NEUTRINO,$NEUTRINO" \
+      -g "$GEOFILE" \
+      -t "$TOPVOLUME" \
+      -L "cm" \
+      -D "g_cm3" \
+      -e "$COL_NUMBER" \
+      -o "$(basename "$OUTPUTFILE_GEN" .0.ghep.root)" \
+      --tune "$TUNE" \
+      --cross-sections "$XSECTION" \
+      --event-generator-list "$EVENTGENLIST" \
+      --message-thresholds "$GENIE/config/Messenger_laconic.xml" $Z_FLAG \
+      --seed "$SEED"
+else
+  gevgen_fnal -f "$FLUX,,-$NEUTRINO,$NEUTRINO" \
+      -g "$GEOFILE" \
+      -t "$TOPVOLUME" \
+      -L "cm" \
+      -D "g_cm3" \
+      -n "$NEVENTS" \
+      -o "$(basename "$OUTPUTFILE_GEN" .0.ghep.root)" \
+      --tune "$TUNE" \
+      --cross-sections "$XSECTION" \
+      --event-generator-list "$EVENTGENLIST" \
+      --message-thresholds "$GENIE/config/Messenger_laconic.xml" $Z_FLAG \
+      --seed "$SEED"
+fi
+
 
 OUTPUTGST=$(basename $OUTPUTFILE_GEN .ghep.root).gst.root
 

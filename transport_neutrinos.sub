@@ -11,7 +11,7 @@ max_retries       = 3
 # retry_until      = !member(ExitCode,{2,13,42})
 # ---------------------------------
 
-arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR) $(GEOFILE) $(XSEC) $(SNDSW_DIR)
+arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR) $(GEOFILE) $(XSEC) $(SNDSW_DIR) $(ADVSND)
 
 output                = ./logs/transport_neutrinos.$(ClusterId).$(ProcId).out
 error                 = ./logs/transport_neutrinos.$(ClusterId).$(ProcId).err

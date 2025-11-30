@@ -15,8 +15,6 @@ import argparse
 from pathlib import Path
 import yaml
 
-import os
-
 sndsw_dir = os.getenv("SNDSW_DIR")
 if not sndsw_dir:  # None or empty string
     raise RuntimeError(
@@ -66,13 +64,13 @@ def parse_args(argv=None) -> argparse.Namespace:
     parser.add_argument(
         "--nevents",
         type=int,
-        default=yget("nevents", 100),
+        default=yget("nevents", 0),
         help="Number of events per job (NEVENTS).",
     )
     parser.add_argument(
         "--topvol",
         default=yget("topvol", "volMuFilter"),
-        choices=["volMuFilter", "volTarget"],
+        choices=["volMuFilter", "volTarget", "volAdvMuFilter", "volAdvTarget"],
         help="Top volume where neutrino interactions are generated (TOPVOL).",
     )
     parser.add_argument(
@@ -157,6 +155,12 @@ def parse_args(argv=None) -> argparse.Namespace:
         help="GENIE splines (XSEC).",
     )
 
+    parser.add_argument(
+        "--advsnd",
+        action="store_true",
+        help="enable advsnd simulation",
+    )
+
 
 
     return parser.parse_args(remaining)
@@ -165,6 +169,7 @@ def parse_args(argv=None) -> argparse.Namespace:
 def build_vars_from_args(args: argparse.Namespace) -> dict:
     """Convert parsed args back into the VARS dict used by the DAG scripts."""
     VARS = {
+        "ADVSND": args.advsnd,
         "TAG": args.tag,
         "NEVENTS": str(args.nevents),
         "TOPVOL": args.topvol,
@@ -184,10 +189,56 @@ def build_vars_from_args(args: argparse.Namespace) -> dict:
 
 args = parse_args()
 VARS = build_vars_from_args(args)
+
+if int(VARS["NEVENTS"]) != 0 and int(VARS["COLNUM"]) != 0:
+    raise Exception("Choose either collision number or the exact number of events, not both. Set one of the values to 0.")
 # add SNDSW_DIR to VARS
 VARS["SNDSW_DIR"] = str(sndsw_dir)
 # add CONDOR_FOLDER to VARS
 VARS["CONDOR_FOLDER"] = str(condor_dir)
+print(VARS)
+# def write_readme(vars_dict: dict) -> None:
+#     """
+#     Write README.md into OUTPUTDIR / TAG with the simulation parameters.
+#     Follows the template style given by the user.
+#     """
+#     output_base = Path(vars_dict["OUTPUTDIR"])
+#     tag = vars_dict["TAG"]
+#     pdg = vars_dict["NEUTRINO"]
+#     topvol = vars_dict["TOPVOL"]
+
+#     out_dir = output_base / tag / f"nu{pdg}" / f"volume_{topvol}"
+#     out_dir.mkdir(parents=True, exist_ok=True)
+
+#     # Map to template-style variable names
+#     run_tag = tag
+#     events_per_job = vars_dict["NEVENTS"]
+#     output_dir = str(out_dir)
+#     log_dir = os.path.join(str(out_dir), "logs")  # typical pattern, adjust if needed
+#     expected_lumi = (float(vars_dict["COLNUM"])*int(vars_dict["NJOBS"])/78.1)*1e-12
+#     # Fill in your template style, but with fields relevant to this production
+#     readme_content = f"""# Simulation Parameters
+# - advsnd: {vars_dict["ADVSND"]}
+# - run_tag: {run_tag}
+# - njobs: {vars_dict["NJOBS"]}
+# - neutrino_pdg: {vars_dict["NEUTRINO"]}
+# - eventgenlist: {vars_dict["EVENTGENLIST"]}
+# - top_volume: {vars_dict["TOPVOL"]}
+# - collisions_normalization per file (COLNUM): {vars_dict["COLNUM"]}
+# - year: {vars_dict["YEAR"]}
+# - tune: {vars_dict["TUNE"]}
+# - fluka_flux_file: {vars_dict["FLUKAFLUX"]}
+# - GENIE spline file: {vars_dict["XSEC"]}
+# - output_dir: {output_dir}
+# - simulated luminosity: {expected_lumi} fb-1 (L = number_pp_collisions / sigma)
+# """
+#     print(readme_content)
+#     readme_path = out_dir / "README.md"
+#     with open(readme_path, "w") as f:
+#         f.write(readme_content)
+
+from pathlib import Path
+import os
 
 def write_readme(vars_dict: dict) -> None:
     """
@@ -204,26 +255,42 @@ def write_readme(vars_dict: dict) -> None:
 
     # Map to template-style variable names
     run_tag = tag
-    events_per_job = vars_dict["NEVENTS"]
+    events_per_job = int(vars_dict["NEVENTS"]) / int(vars_dict["NJOBS"])
     output_dir = str(out_dir)
     log_dir = os.path.join(str(out_dir), "logs")  # typical pattern, adjust if needed
-    expected_lumi = (float(vars_dict["COLNUM"])*int(vars_dict["NJOBS"])/78.1)*1e-12
-    # Fill in your template style, but with fields relevant to this production
-    readme_content = f"""# Simulation Parameters
+    expected_lumi = (float(vars_dict["COLNUM"]) * int(vars_dict["NJOBS"]) / 78.1) * 1e-12
 
-- run_tag: {run_tag}
-- njobs: {vars_dict["NJOBS"]}
-- neutrino_pdg: {vars_dict["NEUTRINO"]}
-- eventgenlist: {vars_dict["EVENTGENLIST"]}
-- top_volume: {vars_dict["TOPVOL"]}
-- collisions_normalization per file (COLNUM): {vars_dict["COLNUM"]}
-- year: {vars_dict["YEAR"]}
-- tune: {vars_dict["TUNE"]}
-- fluka_flux_file: {vars_dict["FLUKAFLUX"]}
-- GENIE spline file: {vars_dict["XSEC"]}
-- output_dir: {output_dir}
-- simulated luminosity: {expected_lumi} fb-1 (L = number_pp_collisions / sigma)
-"""
+    # Decide which description to use: collisions_normalization vs events
+    colnum_is_zero = float(vars_dict["COLNUM"]) == 0.0
+    if events_per_job != 0 and colnum_is_zero:
+        collisions_or_events_line = f"- number of events per file: {events_per_job}\n"
+        lumi_or_events_line = f"- simulated number of events: {vars_dict['NEVENTS']}\n"
+    else:
+        collisions_or_events_line = (
+            f"- collisions_normalization per file (COLNUM): {vars_dict['COLNUM']}\n"
+        )
+        lumi_or_events_line = (
+            f"- simulated luminosity: {expected_lumi} fb-1 (L = number_pp_collisions / sigma)\n"
+        )
+
+    # Fill in your template style, but with fields relevant to this production
+    readme_content = (
+        f"# Simulation Parameters\n"
+        f"- advsnd: {vars_dict['ADVSND']}\n"
+        f"- run_tag: {run_tag}\n"
+        f"- njobs: {vars_dict['NJOBS']}\n"
+        f"- neutrino_pdg: {vars_dict['NEUTRINO']}\n"
+        f"- eventgenlist: {vars_dict['EVENTGENLIST']}\n"
+        f"- top_volume: {vars_dict['TOPVOL']}\n"
+        f"{collisions_or_events_line}"
+        f"- year: {vars_dict['YEAR']}\n"
+        f"- tune: {vars_dict['TUNE']}\n"
+        f"- fluka_flux_file: {vars_dict['FLUKAFLUX']}\n"
+        f"- GENIE spline file: {vars_dict['XSEC']}\n"
+        f"- output_dir: {output_dir}\n"
+        f"{lumi_or_events_line}"
+    )
+
     print(readme_content)
     readme_path = out_dir / "README.md"
     with open(readme_path, "w") as f:
