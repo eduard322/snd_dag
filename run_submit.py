@@ -160,6 +160,7 @@ def parse_args(argv=None) -> argparse.Namespace:
         action="store_true",
         help="enable advsnd simulation",
     )
+    parser.add_argument("--flow", type=str, nargs='+', default="all", help = "specify the processes to launch: --flow generate_input transport_neutrinos digitize")
 
 
 
@@ -183,20 +184,10 @@ def build_vars_from_args(args: argparse.Namespace) -> dict:
         "OUTPUTDIR": str(args.outputdir),
         "GEOFILE": str(args.geofile),
         "XSEC": str(args.xsec),
+        "FLOW": args.flow,
     }
     return VARS
 
-
-args = parse_args()
-VARS = build_vars_from_args(args)
-
-if int(VARS["NEVENTS"]) != 0 and int(VARS["COLNUM"]) != 0:
-    raise Exception("Choose either collision number or the exact number of events, not both. Set one of the values to 0.")
-# add SNDSW_DIR to VARS
-VARS["SNDSW_DIR"] = str(sndsw_dir)
-# add CONDOR_FOLDER to VARS
-VARS["CONDOR_FOLDER"] = str(condor_dir)
-print(VARS)
 
 
 def write_readme(vars_dict: dict) -> None:
@@ -256,6 +247,57 @@ def write_readme(vars_dict: dict) -> None:
         f.write(readme_content)
 
 
+def build_linear_layers_dag(
+    base: Path,
+    dag_dir: Path,
+    dag_name: str,
+    scripts_to_execute: list[str],
+    node_vars: list[dict],
+    dot_path: Path,
+    pre_skip_code: int,
+):
+    dot_cfg = dags.DotConfig(path=dot_path, update=True)
+    dag = dags.DAG(dot_config=dot_cfg)
+
+    prev = None
+    for stage in scripts_to_execute:
+        sub_file = base / f"{stage}.sub"
+
+        if prev is None:
+            prev = dag.layer(
+                name=stage,
+                submit_description=sub_file,
+                vars=node_vars,
+                dir=base,
+                pre_skip_exit_code=pre_skip_code,
+            )
+        else:
+            prev = prev.child_layer(
+                name=stage,
+                submit_description=sub_file,
+                vars=node_vars,
+                dir=base,
+                pre_skip_exit_code=pre_skip_code,
+            )
+
+    print(dag.describe())
+    dag_file = dags.write_dag(dag, dag_dir=dag_dir, dag_file_name=dag_name)
+    return dag, dag_file
+
+
+args = parse_args()
+VARS = build_vars_from_args(args)
+
+if int(VARS["NEVENTS"]) != 0 and int(VARS["COLNUM"]) != 0:
+    raise Exception("Choose either collision number or the exact number of events, not both. Set one of the values to 0.")
+# add SNDSW_DIR to VARS
+VARS["SNDSW_DIR"] = str(sndsw_dir)
+# add CONDOR_FOLDER to VARS
+VARS["CONDOR_FOLDER"] = str(condor_dir)
+print(VARS)
+
+
+
 write_readme(VARS)
 
 
@@ -273,41 +315,36 @@ shutil.rmtree(dag_dir, ignore_errors=True)
 dag_dir.mkdir(parents=True, exist_ok=True)
 
 # Point to your existing submit files on disk (we reuse them as-is)
-sub_generate  = base / "generate_input_file.sub"
-sub_transport = base / "transport_neutrinos.sub"
-sub_digitise  = base / "digitise.sub"
+# sub_generate  = base / "generate_input_file.sub"
+# sub_transport = base / "transport_neutrinos.sub"
+# sub_digitise  = base / "digitise.sub"
 
 # One logical node per layer (vars is a list; one dict == one underlying node)
 node_vars = [VARS]
 
-# DOT config like:  DOT dag.dot UPDATE
-dot_cfg = dags.DotConfig(path=DOT_PATH, update=True)
 
-dag = dags.DAG(dot_config=dot_cfg)
+if VARS["FLOW"] == "all":
+    scripts_to_execute = ["generate_input_file", "transport_neutrinos", "digitise", "analysis"]
+else:
+    scripts_to_execute = VARS["FLOW"]
 
-# Nodes (layers), each with PRE_SKIP behavior
-gen = dag.layer(
-    name="generate_input_file",
-    submit_description=sub_generate,
-    vars=node_vars,
-    dir=base,                       # submit from your workflow folder
-    pre_skip_exit_code=PRE_SKIP_CODE,
+print(f"launching {scripts_to_execute}...")
+# One logical node per layer in your example
+node_vars = [VARS]
+
+dag, dag_file = build_linear_layers_dag(
+    base=base,
+    dag_dir=dag_dir,
+    dag_name=DAG_NAME,
+    scripts_to_execute=scripts_to_execute,
+    node_vars=node_vars,
+    dot_path=DOT_PATH,
+    pre_skip_code=PRE_SKIP_CODE,
 )
-trn = gen.child_layer(
-    name="transport_neutrinos",
-    submit_description=sub_transport,
-    vars=node_vars,
-    dir=base,
-    pre_skip_exit_code=PRE_SKIP_CODE,
-)
-dig = trn.child_layer(
-    name="digitise",
-    submit_description=sub_digitise,
-    vars=node_vars,
-    dir=base,
-    pre_skip_exit_code=PRE_SKIP_CODE,
-)
-print(dag.describe())
+
+
+
+#print(dag.describe())
 
 dag_file = dags.write_dag(dag, dag_dir=dag_dir, dag_file_name=DAG_NAME)
 

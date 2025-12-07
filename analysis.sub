@@ -1,4 +1,4 @@
-executable            = digitise.sh
+executable            = analysis.sh
 #NJOBS = 1000
 NEVENTSPERJOB = $INT(NEVENTS) / $INT(NJOBS)
 # ----- automatic retry logic -----

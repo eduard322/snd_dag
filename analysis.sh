@@ -26,7 +26,7 @@ set -x
 xrdcp $EOSSERVER/$OUTPUTDIR/$OUTPUTFILE_DIGI ./$OUTPUTFILE_DIGI
 
 
-python "${WORKDIR}"/image_creator.py -j 4 --inputfiles $OUTPUTFILE_DIGI -o image.root
+python $8/image_creator.py -j 4 --inputfiles $OUTPUTFILE_DIGI -o image.root
 
 # # Temporarily turn off -e so we don't abort
 # set +o errexit
