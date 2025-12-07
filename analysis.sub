@@ -1,0 +1,25 @@
+executable            = digitise.sh
+#NJOBS = 1000
+NEVENTSPERJOB = $INT(NEVENTS) / $INT(NJOBS)
+# ----- automatic retry logic -----
+# Consider exit‑code 0 a success…
+success_exit_code = 0
+# …otherwise retry up to 5 times
+max_retries       = 3
+# (optional) stop retrying if we hit a specific exit code
+# retry_until      = !member(ExitCode,{2,13,42})
+# ---------------------------------
+
+arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR) $(GEOFILE) $(XSEC) $(SNDSW_DIR) $(ADVSND)
+
+output                = ./logs/analysis.$(ClusterId).$(ProcId).out
+error                 = ./logs/analysis.$(ClusterId).$(ProcId).err
+log                   = ./logs/analysis.$(ClusterId).$(ProcId).log
+MY.SendCredential = True
+getenv = False
+transfer_output_files = ""
+notification = Never
+RequestCpus = 1
+requirements = (OpSysAndVer =?= "AlmaLinux9")
++JobFlavour             ="longlunch"
+queue $(NJOBS)

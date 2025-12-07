@@ -197,48 +197,7 @@ VARS["SNDSW_DIR"] = str(sndsw_dir)
 # add CONDOR_FOLDER to VARS
 VARS["CONDOR_FOLDER"] = str(condor_dir)
 print(VARS)
-# def write_readme(vars_dict: dict) -> None:
-#     """
-#     Write README.md into OUTPUTDIR / TAG with the simulation parameters.
-#     Follows the template style given by the user.
-#     """
-#     output_base = Path(vars_dict["OUTPUTDIR"])
-#     tag = vars_dict["TAG"]
-#     pdg = vars_dict["NEUTRINO"]
-#     topvol = vars_dict["TOPVOL"]
 
-#     out_dir = output_base / tag / f"nu{pdg}" / f"volume_{topvol}"
-#     out_dir.mkdir(parents=True, exist_ok=True)
-
-#     # Map to template-style variable names
-#     run_tag = tag
-#     events_per_job = vars_dict["NEVENTS"]
-#     output_dir = str(out_dir)
-#     log_dir = os.path.join(str(out_dir), "logs")  # typical pattern, adjust if needed
-#     expected_lumi = (float(vars_dict["COLNUM"])*int(vars_dict["NJOBS"])/78.1)*1e-12
-#     # Fill in your template style, but with fields relevant to this production
-#     readme_content = f"""# Simulation Parameters
-# - advsnd: {vars_dict["ADVSND"]}
-# - run_tag: {run_tag}
-# - njobs: {vars_dict["NJOBS"]}
-# - neutrino_pdg: {vars_dict["NEUTRINO"]}
-# - eventgenlist: {vars_dict["EVENTGENLIST"]}
-# - top_volume: {vars_dict["TOPVOL"]}
-# - collisions_normalization per file (COLNUM): {vars_dict["COLNUM"]}
-# - year: {vars_dict["YEAR"]}
-# - tune: {vars_dict["TUNE"]}
-# - fluka_flux_file: {vars_dict["FLUKAFLUX"]}
-# - GENIE spline file: {vars_dict["XSEC"]}
-# - output_dir: {output_dir}
-# - simulated luminosity: {expected_lumi} fb-1 (L = number_pp_collisions / sigma)
-# """
-#     print(readme_content)
-#     readme_path = out_dir / "README.md"
-#     with open(readme_path, "w") as f:
-#         f.write(readme_content)
-
-from pathlib import Path
-import os
 
 def write_readme(vars_dict: dict) -> None:
     """
@@ -313,12 +272,6 @@ dag_dir = base / f"dag_{tag_suffix}" / f"nu{neutrino}" / VARS["TOPVOL"]
 shutil.rmtree(dag_dir, ignore_errors=True)
 dag_dir.mkdir(parents=True, exist_ok=True)
 
-#print(f"Creating a dag directory dag_{VARS['TAG'].split('/')[-1]}...")
-#dag_dir = base / f"dag_{VARS['TAG'].split('/')[-1]}"
-#dag_dir.mkdir(parents=True, exist_ok=True)
-
-#DAG_NAME =  dag_dir / DAG_NAME
-#DOT_PATH =  dag_dir / DOT_PATH
 # Point to your existing submit files on disk (we reuse them as-is)
 sub_generate  = base / "generate_input_file.sub"
 sub_transport = base / "transport_neutrinos.sub"
