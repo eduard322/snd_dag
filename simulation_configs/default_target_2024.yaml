@@ -1,5 +1,5 @@
 tag: "tests/sndlhc_1500fb-1_fixed_flux_1"
-nevents: 100 # deprecated, see collision number colnum
+nevents: 0 # choose either number of events or collision number colnum. Set another one to 0
 topvol: "volTarget" # possible options: ["volTarget", "volMuFilter"]
 neutrino: 12 # includes also antineutrinos
 eventgenlist: "Default" # others are not recommended to use

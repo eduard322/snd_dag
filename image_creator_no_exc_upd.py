@@ -107,34 +107,13 @@ def main():
     )
     ROOT.gInterpreter.Declare(
         """
-        int strip_from_id_new(int id) {
-        return (id) % 10000;
-        }
-        """
-    )
-    ROOT.gInterpreter.Declare(
-        """
-        int detector_from_id(int id) {
-        return (id - strip_from_id_new(id)) / 10000;
-        }
-        """
-    )
-    ROOT.gInterpreter.Declare(
-        """
-        int station_from_id_new(int id) {
-        return (detector_from_id(id) / 10) - 1;
-        }
-        """
-    )
-    # +
-    ROOT.gInterpreter.Declare(
-        """
         int column_from_id(int id) {
-        return (id >> 11) % 4;
+        int column = (id >> 11) % 4;
+        int sensor = (id >> 10) % 2;
+        return 2*column + sensor;
         }
         """
     )
-    # +
     ROOT.gInterpreter.Declare(
         """
         int sensor_from_id(int id) {
@@ -142,7 +121,6 @@ def main():
         }
         """
     )
-    # +
     ROOT.gInterpreter.Declare(
         """
         int strip_from_id(int id) {
@@ -150,7 +128,6 @@ def main():
         }
         """
     )
-    # +
     ROOT.gInterpreter.Declare(
         """
         int plane_from_id(int id) {
@@ -159,12 +136,13 @@ def main():
         """
     )
     ROOT.gInterpreter.Declare(
-        """
-        int plane_from_id_new(int id) {
-        return detector_from_id(id) % 10;
-        }
-        """
-    )
+            """
+            int row_from_id(int id) {
+            return (id >> 13) % 8;
+            }
+            """
+        )
+
     ROOT.gInterpreter.Declare(
         """
         int is_charged_lepton(int id) {
@@ -198,32 +176,78 @@ def main():
         }
         """
     )
-    # TODO simplify? Careful, very fragile!
-    ROOT.gInterpreter.Declare(
-        """
-        int index_from_id(int id) {
-            int columns_mufilter = column_from_id(id);
-            int sensors_mufilter = sensor_from_id(id);
-            int strips_mufilter = strip_from_id(id);
-            return (
-            (
-                2 * columns_mufilter
-                + abs((1 - (2 * sensors_mufilter)) * columns_mufilter) % 2
-                + sensors_mufilter
-                - 2 * (sensors_mufilter * columns_mufilter % 2)
-                + columns_mufilter % 2
-                + 2
-                - 2 * (columns_mufilter + sensors_mufilter >= 1)
-            )
-            * 768
-            + pow(-1, columns_mufilter) * strips_mufilter
-            - 2 * strips_mufilter * (columns_mufilter == 0)
-            - 1 * (columns_mufilter % 2)
-            - 1 * (columns_mufilter == 0)
-            );
+
+    # ROOT.gInterpreter.Declare(r"""
+    # // Z2-symmetric mapping
+    # // base = strip + row*pitch
+    # // rev  = (pitch - strip) + row*pitch
+    # // apply rev if (column>=2) XOR (row is odd)
+    # int strip_id_z2(int strip, int row, int column, int pitch=768) {
+    #     const int base = strip + row * pitch;
+    #     const int rev  = (pitch - 1 - strip) + row * pitch;
+
+    #     // XOR condition (exactly one true => flip once)
+    #     const bool mask = (column >= 2) != ((row % 2) == 1);
+
+    #     return mask ? rev : base;
+    # }
+
+    # // invert X for plane==1
+    # int invert_X_strip_id(int strip_id, int plane, int pitch=768) {
+    #     return (plane == 1) ? (pitch * 4 - 1 - strip_id) : strip_id;
+    # }
+
+    # // Convenience: do both in one call
+    # int calc_strip_id(int strip, int row, int column, int plane, int pitch=768) {
+    #     int sid = strip_id_z2(strip, row, column, pitch);
+    #     sid = invert_X_strip_id(sid, plane, pitch);
+    #     return sid;
+    # }
+    # """)
+
+    ROOT.gInterpreter.Declare(r"""
+    #include <ROOT/RVec.hxx>
+    using ROOT::VecOps::RVec;
+
+    // Your scalar functions (as before)
+    int strip_id_z2(int strip, int row, int column, int pitch=768) {
+        const int base = strip + row * pitch;
+        const int rev  = (pitch - 1 - strip) + row * pitch;
+        const bool mask = (column >= 2) != ((row % 2) == 1); // XOR
+        return mask ? rev : base;
+    }
+
+    int invert_X_strip_id(int strip_id, int plane, int pitch=768) {
+        return (plane == 1) ? (pitch * 4 - 1 - strip_id) : strip_id;
+    }
+
+    int calc_strip_id(int strip, int row, int column, int plane, int pitch=768) {
+        int sid = strip_id_z2(strip, row, column, pitch);
+        sid = invert_X_strip_id(sid, plane, pitch);
+        return sid;
+    }
+
+    // Vectorized overload
+    RVec<int> calc_strip_id_vec(const RVec<int>& strips,
+                                const RVec<int>& rows,
+                                const RVec<int>& columns,
+                                const RVec<int>& planes,
+                                int pitch=768) {
+        const auto n = strips.size();
+        RVec<int> out(n);
+
+        // Optional safety checks (comment out if you want max speed)
+        // if (rows.size() != n || columns.size() != n || planes.size() != n) {
+        //     throw std::runtime_error("calc_strip_id_vec: input RVec sizes mismatch");
+        // }
+
+        for (size_t i = 0; i < n; ++i) {
+            out[i] = calc_strip_id(strips[i], rows[i], columns[i], planes[i], pitch);
         }
-        """
-    )
+        return out;
+    }
+    """)
+
     ROOT.gInterpreter.Declare(
         """
         bool is_muonic(const TClonesArray& tracks) {
@@ -239,6 +263,20 @@ def main():
         }
         """
     )
+    # ROOT.gInterpreter.Declare(
+    #     """
+    #     bool fiducial_cut(double x, double y, double z) {
+    #          if (x < -30 || x > -10)
+    #               return false;
+    #          if (y < 35 || y > 55)
+    #               return false;
+    #          if (z < -20 || z > 20)
+    #               return false;
+    #          return true;
+    #     }
+    #     """
+    # )
+
     # volAdvTarget_1           : z=   11.8220cm  dZ=   43.4967cm  [  -31.6747      55.3186] dx=   29.9993cm [  -57.0019       2.9968] dy=   29.9970cm [   27.0030      86.9970]                dummy
     #[  -58.1054       1.8933] dy=   29.9970cm [   27.5323      87.5263]
     # [-52.0790      -4.1301]
@@ -257,6 +295,7 @@ def main():
         }
         """
     )
+
 
     df = (
         df.Define("start_x", "dynamic_cast<ShipMCTrack*>(MCTrack[1])->GetStartX()")
@@ -317,40 +356,78 @@ def main():
             "Map(points_per_hit_mufilter, apply_saturation)",
         )
     )
+    # df = (
+    #     (
+    #         df.Define(
+    #             "stations", "Map(Digi_AdvTargetHits.fDetectorID, station_from_id_new)"
+    #         )
+    #         .Define("strips", "Map(Digi_AdvTargetHits.fDetectorID, strip_from_id_new)")
+    #         .Define("planes", "Map(Digi_AdvTargetHits.fDetectorID, plane_from_id_new)")
+    #         .Define(
+    #             "stations_mufilter",
+    #             "Map(Digi_AdvMuFilterHits.fDetectorID, station_from_id_new)",
+    #         )
+    #         .Define(
+    #             "strips_mufilter",
+    #             "Map(Digi_AdvMuFilterHits.fDetectorID, strip_from_id_new)",
+    #         )
+    #         .Define(
+    #             "planes_mufilter",
+    #             "Map(Digi_AdvMuFilterHits.fDetectorID, plane_from_id_new)",
+    #         )
+    #         .Define(
+    #             "indices",
+    #             "strips",
+    #         )
+    #         .Define("indices_mufilter", "strips_mufilter")
+    #     )
+    #     if args.new_geo
+    #     else (
+    #         df.Define(
+    #             "stations", "Map(Digi_AdvTargetHits.fDetectorID, station_from_id)"
+    #         )
+    #         .Define("columns", "Map(Digi_AdvTargetHits.fDetectorID, column_from_id)")
+    #         .Define("sensors", "Map(Digi_AdvTargetHits.fDetectorID, sensor_from_id)")
+    #         .Define("strips", "Map(Digi_AdvTargetHits.fDetectorID, strip_from_id)")
+    #         .Define("planes", "Map(Digi_AdvTargetHits.fDetectorID, plane_from_id)")
+    #         .Define(
+    #             "stations_mufilter",
+    #             "Map(Digi_AdvMuFilterHits.fDetectorID, station_from_id)",
+    #         )
+    #         .Define(
+    #             "columns_mufilter",
+    #             "Map(Digi_AdvMuFilterHits.fDetectorID, column_from_id)",
+    #         )
+    #         .Define(
+    #             "sensors_mufilter",
+    #             "Map(Digi_AdvMuFilterHits.fDetectorID, sensor_from_id)",
+    #         )
+    #         .Define(
+    #             "strips_mufilter",
+    #             "Map(Digi_AdvMuFilterHits.fDetectorID, strip_from_id)",
+    #         )
+    #         .Define(
+    #             "planes_mufilter",
+    #             "Map(Digi_AdvMuFilterHits.fDetectorID, plane_from_id)",
+    #         )
+    #         .Define(
+    #             "indices",
+    #             "(4 * columns + sensors - 2 * columns * sensors) * 768 + pow(-1, columns) * strips - 1 * columns",
+    #         )
+    #         .Define(
+    #             "indices_mufilter",
+    #             "Map(Digi_AdvMuFilterHits.fDetectorID, index_from_id)",
+    #         )
+    #     )
+    # )
+
     df = (
-        (
-            df.Define(
-                "stations", "Map(Digi_AdvTargetHits.fDetectorID, station_from_id_new)"
-            )
-            .Define("strips", "Map(Digi_AdvTargetHits.fDetectorID, strip_from_id_new)")
-            .Define("planes", "Map(Digi_AdvTargetHits.fDetectorID, plane_from_id_new)")
-            .Define(
-                "stations_mufilter",
-                "Map(Digi_AdvMuFilterHits.fDetectorID, station_from_id_new)",
-            )
-            .Define(
-                "strips_mufilter",
-                "Map(Digi_AdvMuFilterHits.fDetectorID, strip_from_id_new)",
-            )
-            .Define(
-                "planes_mufilter",
-                "Map(Digi_AdvMuFilterHits.fDetectorID, plane_from_id_new)",
-            )
-            .Define(
-                "indices",
-                "strips",
-            )
-            .Define("indices_mufilter", "strips_mufilter")
-        )
-        if args.new_geo
-        else (
-            df.Define(
-                "stations", "Map(Digi_AdvTargetHits.fDetectorID, station_from_id)"
-            )
+        df.Define("stations", "Map(Digi_AdvTargetHits.fDetectorID, station_from_id)")
             .Define("columns", "Map(Digi_AdvTargetHits.fDetectorID, column_from_id)")
             .Define("sensors", "Map(Digi_AdvTargetHits.fDetectorID, sensor_from_id)")
             .Define("strips", "Map(Digi_AdvTargetHits.fDetectorID, strip_from_id)")
             .Define("planes", "Map(Digi_AdvTargetHits.fDetectorID, plane_from_id)")
+            .Define("rows", "Map(Digi_AdvTargetHits.fDetectorID, row_from_id)")
             .Define(
                 "stations_mufilter",
                 "Map(Digi_AdvMuFilterHits.fDetectorID, station_from_id)",
@@ -372,17 +449,20 @@ def main():
                 "Map(Digi_AdvMuFilterHits.fDetectorID, plane_from_id)",
             )
             .Define(
+                "rows_mufilter",
+                "Map(Digi_AdvMuFilterHits.fDetectorID, row_from_id)",
+            )
+            .Define(
                 "indices",
-                "(4 * columns + sensors - 2 * columns * sensors) * 768 + pow(-1, columns) * strips - 1 * columns",
+                "calc_strip_id_vec(strips, rows, columns, planes)",
             )
             .Define(
                 "indices_mufilter",
-                "Map(Digi_AdvMuFilterHits.fDetectorID, index_from_id)",
+                "calc_strip_id_vec(strips_mufilter, rows_mufilter, columns_mufilter, planes_mufilter)",
             )
-        )
-    )
+       )
 
-    print(df)
+
     report = df.Report()
 
     col_names = {
@@ -412,10 +492,11 @@ def main():
     )  # TODO Use TMatrix to avoid detour via uproot?
     report.Print()
 
-    target_dims = (3279, 116) if args.new_geo else (3072, 200)
-    mufilter_dims = (3279, 34) if args.new_geo else (4608, 42)
-
-    #breakpoint()
+    # target_dims = (3279, 116) if args.new_geo else (3072, 200)
+    # mufilter_dims = (3279, 34) if args.new_geo else (4608, 42)
+    target_dims = (768*4, 116)
+    # TODO how to do more optimized the last HCAL part that is only X?
+    mufilter_dims = (768*4, 68)
     events = uproot.open("temporary.root:df")
     # TODO second file for testing?
     outputfile = uproot.recreate(args.outputfile)
@@ -434,6 +515,7 @@ def main():
             "energy_dep_mufilter": ">f8",
             "nu_flavour": ">i8",
             "is_cc": "bool",
+            "muonic": "bool",
         },
         title="Dataframe for CNN studies",
     )
@@ -452,10 +534,9 @@ def main():
             stations = batch["stations_mufilter"][i].astype(int)
             planes = batch["planes_mufilter"][i].astype(int)
             points = batch["saturated_points_per_hit_mufilter"][i].astype(int)
-            hitmaps_mufilter[i, indices[planes == 0], stations[planes == 0]] = points[
-                planes == 0
-            ]
+            hitmaps_mufilter[i, indices, 2 * stations + planes] = points
             if args.plot_events:
+                print("plotting...")
                 plt.subplot(3, 2, 1)
                 plt.imshow(hitmaps[i, :, 0:-1:2], aspect="auto")
                 plt.subplot(3, 2, 2)
@@ -468,8 +549,10 @@ def main():
                 plt.imshow(hitmaps[i, :, ::], aspect="auto")
                 plt.subplot(3, 2, 6)
                 plt.imshow(hitmaps_mufilter[i, :, ::], aspect="auto")
-                os.makedirs("/eos/user/u/ursovsnd/figures_temp/",exist_ok = True)
-                plt.savefig(f"/eos/user/u/ursovsnd/figures_temp/{i}.pdf")
+                os.makedirs("/eos/user/u/ursovsnd/SWAN_projects/tests/calopid/plots/",exist_ok = True)
+                plt.savefig(f"/eos/user/u/ursovsnd/SWAN_projects/tests/calopid/plots/{i}_sat_5_upd.png")
+
+                #plt.show()
         outputfile["df"].extend(
             {
                 "X": hitmaps.astype(np.float32),
@@ -484,6 +567,7 @@ def main():
                 "energy_dep_mufilter": batch["energy_dep_mufilter"],
                 "nu_flavour": batch["nu_flavour"],
                 "is_cc": batch["is_cc"],
+                "muonic": batch["muonic"],
             }
         )
         t.update(batch_size)
@@ -494,3 +578,4 @@ def main():
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     main()
+

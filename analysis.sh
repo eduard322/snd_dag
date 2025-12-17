@@ -26,7 +26,11 @@ set -x
 xrdcp $EOSSERVER/$OUTPUTDIR/$OUTPUTFILE_DIGI ./$OUTPUTFILE_DIGI
 
 
-python $8/image_creator.py -j 4 --inputfiles $OUTPUTFILE_DIGI -o image.root
+python $8/image_creator_no_exc_upd.py -j 4 --inputfiles $OUTPUTFILE_DIGI -o image.root
+
+#python $8/image_creator.py -j 4 --inputfiles $OUTPUTFILE_DIGI -o image_muonic.root --muonic
+#python $8/image_creator.py -j 4 --inputfiles $OUTPUTFILE_DIGI -o image_nonmuonic.root
+
 
 # # Temporarily turn off -e so we don't abort
 # set +o errexit
@@ -40,5 +44,9 @@ python $8/image_creator.py -j 4 --inputfiles $OUTPUTFILE_DIGI -o image.root
 #echo "Checking..."
 #mv "${INPUTFILE%.root}_digCPP.root" "$OUTPUTFILE_DIGI"
 #xrdcp "$OUTPUTFILE" "$OUTPUTDIR"/.
-xrdcp image.root $EOSSERVER/$OUTPUTDIR/image.root
+#xrdcp image.root $EOSSERVER/$OUTPUTDIR/image.root
+cp image.root $OUTPUTDIR/image.root
+
+#xrdcp image_muonic.root $EOSSERVER/$OUTPUTDIR/image_muonic.root
+#xrdcp image_nonmuonic.root $EOSSERVER/$OUTPUTDIR/image_nonmuonic.root
 
