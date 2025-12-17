@@ -1,14 +1,16 @@
-tag: "tests/sndlhc_15000fb-1_fixed_flux_1"
+tag: "tests/2022/sndlhc_15000fb-1_down"
 nevents: 0 # choose either number of events or collision number colnum. Set another one to 0
 topvol: "volTarget" # possible options: ["volTarget", "volMuFilter"]
 neutrino: 12 # includes also antineutrinos
 eventgenlist: "Default" # others are not recommended to use
-njobs: 1000
+njobs: 500
 colnum: 1.1715e15 # corresponds to 15 fb-1
-year: "2024"
+year: "2022"
 tune: "SNDG18_02a_01_000" # change only if you know what you are doing
-flukaflux: "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/ALL_lhc_ir1_coll_2024_1p585mm_xrp_exp001_fort.30_FIXED.gsimple.root" # flux for LHC 2024 optics
+#flukaflux: "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/ALL_lhc_ir1_coll_2024_1p585mm_xrp_exp001_fort.30_FIXED.gsimple.root" # flux for LHC 2024 optics
+flukaflux: "/eos/experiment/sndlhc/MonteCarlo/FLUKA/neutrino_down_13TeV/SND_neutrinos_13TeV_down_19p95M_z481p22m_gsimple.root"
 outputdir: "/eos/experiment/sndlhc/users/ursovsnd/neutrino_production_sndlhc_june_2025" # set output global dir, where the code will create tag dir with output
-geofile: "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/output_geo_geant.gdml" # created by create_geo_file.py
+#geofile: "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/output_geo_geant.gdml" # created by create_geo_file.py
+geofile: "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/output_geo_geant_2022.gdml"
 xsec: "/eos/experiment/sndlhc/MonteCarlo/Neutrinos/Genie/splines/genie_splines_GENIE_v32_SNDG18_02a_01_000.xml" # change only if you know what you are doing
 
