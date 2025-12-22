@@ -160,7 +160,7 @@ def parse_args(argv=None) -> argparse.Namespace:
         action="store_true",
         help="enable advsnd simulation",
     )
-    parser.add_argument("--flow", type=str, nargs='+', default="all", help = "specify the processes to launch: --flow generate_input transport_neutrinos digitize")
+    parser.add_argument("--flow", type=str, nargs='+', default="standard", help = "specify the processes to launch: --flow generate_input transport_neutrinos digitize")
 
 
 
@@ -325,6 +325,8 @@ node_vars = [VARS]
 
 if VARS["FLOW"] == "all":
     scripts_to_execute = ["generate_input_file", "transport_neutrinos", "digitise", "analysis"]
+elif VARS["FLOW"] == "standard":
+    scripts_to_execute = ["generate_input_file", "transport_neutrinos", "digitise"]
 else:
     scripts_to_execute = VARS["FLOW"]
 
