@@ -1,11 +1,11 @@
 advsnd: True
-#tag: "tests/advsndlhc_1k_events_fixed_flux_1"
-tag: "2025/for_classification_1"
-nevents: 500000 # deprecated, see collision number colnum
+tag: "tests/advsndlhc_1k_events_fixed_flux_2"
+#tag: "2025/for_classification_1"
+nevents: 100 # deprecated, see collision number colnum
 topvol: "volAdvTarget" # possible options: ["volTarget", "volMuFilter"]
 neutrino: 16 # includes also antineutrinos
 eventgenlist: "CCDIS" # others are not recommended to use
-njobs: 1000
+njobs: 10
 colnum: 0  # corresponds to 15 fb-1
 year: "2024"
 tune: "SNDG18_02a_01_000" # change only if you know what you are doing

@@ -21,6 +21,18 @@ Files to run SND@LHC and AdvSND neutrino simulation (and maybe other simulations
 * If you want to simulate SND@HL-LHC, then just add --advsnd flag to the `run_submit.py`: `run_submit.py --yaml simulation_configs/advtarget_14_2024.yaml --advsnd`.
 * Set the steps you want to launch by `--flow` key: `run_submit.py --yaml simulation_configs/your_config.yaml --flow generate_input_file transport digitise`. Write step by step the names of the `.sub` files you would like to launch. To launch the hardcoded pipeline of ["generate_input_file", "transport_neutrinos", "digitise", "analysis"] use `--flow all`.
 * You can choose the exact number of events to simulate or the number of pp collisions to simulate. See yaml configs.
+
+## Possible inputs
+
+| Flux for                                       | Input GENIE flux                                                                                                              |
+|------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| snd@lhc 2022 nue-numu vertical down -160 urad  | /eos/experiment/sndlhc/MonteCarlo/FLUKA/neutrino_down_13TeV/SND_neutrinos_13TeV_down_19p95M_z481p22m_gsimple.root             |
+| snd@lhc 2022 vertical up 160 urad              | /eos/experiment/sndlhc/MonteCarlo/FLUKA/neutrino_up_13TeV/all13TeVK0_gsimple.root                                             |
+| snd@lhc 2024 vertical up 160 urad              | /eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/ALL_lhc_ir1_coll_2024_1p585mm_xrp_exp001_fort.30_FIXED.gsimple.root |
+| advsnd@lhc no_exc nue-numu horizontal 250 urad | /eos/experiment/sndlhc/MonteCarlo/FLUKA/AdvSND/FAR/neutrino/HL-LHC_neutrinos_TI18_20e6pr.gsimple.root                         |
+| advsnd@lhc no_exc nutau horizontal 250 urad    | /eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/no_bias_5000m_eta_g_6-0_forward_09042025_1.gsimple.root             |
+
+
 ## Verifying the number of files
 
 * `ls -la $OUTPUT_FOLDER$/nu12/volume_volMuFilter/*/sndLHC.Genie-TGeant4_dig.root | wc -l`
