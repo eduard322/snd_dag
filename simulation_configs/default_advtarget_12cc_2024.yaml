@@ -1,10 +1,12 @@
 advsnd: True
 #tag: "tests/advsndlhc_1k_events_fixed_flux_1"
-tag: "2025/for_classification_1"
+#tag: "2025/for_classification_3_upd_decay"
+tag: "2025/for_classification_3_cc"
 nevents: 100000 # deprecated, see collision number colnum
 topvol: "volAdvTarget" # possible options: ["volTarget", "volMuFilter"]
-neutrino: 14 # includes also antineutrinos
-eventgenlist: "CCDIS" # others are not recommended to use
+#topvol: "volAdvMuFilter"
+neutrino: 12 # includes also antineutrinos
+eventgenlist: "CC" # others are not recommended to use
 njobs: 1000
 colnum: 0  # corresponds to 15 fb-1
 year: "2024"
@@ -16,6 +18,8 @@ outputdir: "/eos/experiment/sndlhc/users/ursovsnd/advsnd"
 geofile: "/eos/user/u/ursovsnd/neutrino_production_sndlhc_june_2025/advanced_geofile_2.gdml" # created by create_geo_file.py
 #xsec: "/eos/experiment/sndlhc/MonteCarlo/Neutrinos/Genie/splines/genie_splines_GENIE_v32_SNDG18_02a_01_000.xml" # change only if you know what you are doing
 #xsec: "/afs/cern.ch/work/d/dannc/public/AdvSND/2024/splines/genie_splines_GENIE_v32_ADVSNDG18_02a_01_000_2_plus2.xml"
-xsec: "/afs/cern.ch/work/d/dannc/public/AdvSND/2024/splines/genie_splines_GENIE_v32_ADVSNDG18_02a_01_000_2_plus.xml"
+#xsec: "/afs/cern.ch/work/d/dannc/public/AdvSND/2024/splines/genie_splines_GENIE_v32_ADVSNDG18_02a_01_000_2_plus.xml"
+#xsec: "/eos/user/u/ursovsnd/create_spline/genie_splines_GENIE_v32_ADVSNDG18_02a_01_000_2_plus_ADVSND_test_CCNC.xml"
+xsec: "/eos/user/u/ursovsnd/create_spline/genie_splines_GENIE_v32_ADVSNDG18_02a_01_000_2_plus_ADVSND_test_CCNC_add_e_NC_add_tau_CC.xml"
 #xsec: "/afs/cern.ch/work/d/dannc/public/AdvSND/2024/splines/genie_splines_GENIE_v32_ADVSNDG18_02a_01_000_2_plus2.xml"
 #flukaflux: "/eos/experiment/sndlhc/users/ursovsnd/genie_input/20b_no_bias.gsimple.root"

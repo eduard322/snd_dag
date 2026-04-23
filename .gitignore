@@ -8,3 +8,6 @@ dag_*
 *.root
 *.gdml
 system_config_dev.sh
+.snakemake
+CLAUDE.md
+.claude/

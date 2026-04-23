@@ -18,8 +18,13 @@ LSB_JOBINDEX=$((ProcId+1))
 set -x
 
 if xrdfs $EOSSERVER stat $OUTPUTDIR/$OUTPUTFILE_TRANSP; then
-	echo "Target exists, nothing to do."
-	exit 0
+	if [ "${RESIMULATE:-False}" = "True" ]; then
+		echo "WARNING: output $OUTPUTDIR/$OUTPUTFILE_TRANSP already exists — deleting for resimulation."
+		xrdfs $EOSSERVER rm $OUTPUTDIR/$OUTPUTFILE_TRANSP
+	else
+		echo "Target exists, nothing to do."
+		exit 0
+	fi
 fi
 
 xrdcp $EOSSERVER/$OUTPUTDIR/$INPUT ./$INPUT
@@ -63,9 +68,26 @@ if [ "${16}" = "True" ]; then
     --Genie 4 -f "$INPUT" --nEvents "$N" --AdvSND
 else
   python "$SNDSW_ROOT"/shipLHC/run_simSND.py \
-    --Genie 4 -f "$INPUT" --nEvents "$N" --year "$YEAR"
+    --Genie 4 -f "$INPUT" --nEvents "$N" -y "$YEAR"
 fi
 
+
+# Validate cbmsim TTree in transport output before copying to EOS
+python3 -c "
+import sys, ROOT
+ROOT.gROOT.SetBatch(True)
+fname = '$OUTPUTFILE_TRANSP'
+f = ROOT.TFile.Open(fname)
+if not f or f.IsZombie():
+    print('ERROR: cannot open ' + fname, file=sys.stderr); sys.exit(1)
+t = f.Get('cbmsim')
+if not t or not isinstance(t, ROOT.TTree):
+    print('ERROR: no TTree cbmsim in ' + fname, file=sys.stderr); sys.exit(1)
+n = t.GetEntries()
+if n == 0:
+    print('ERROR: cbmsim has 0 entries in ' + fname, file=sys.stderr); sys.exit(1)
+print(f'OK: cbmsim has {n} entries in ' + fname)
+"
 
 xrdcp $OUTPUTFILE_TRANSP $EOSSERVER/$OUTPUTDIR/$OUTPUTFILE_TRANSP
 xrdcp $GEOFILE_GEANT4 $EOSSERVER/$OUTPUTDIR/$GEOFILE_GEANT4

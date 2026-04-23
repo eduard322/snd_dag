@@ -1,4 +1,4 @@
-executable            = digitise.sh
+executable            = mceb.sh
 #NJOBS = 1000
 NEVENTSPERJOB = $INT(NEVENTS) / $INT(NJOBS)
 # ----- automatic retry logic -----
@@ -12,9 +12,9 @@ max_retries       = 3
 
 arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR) $(GEOFILE) $(XSEC) $(SNDSW_DIR) $(ADVSND) $(RESIMULATE)
 
-output                = ./logs/digitise.$(ClusterId).$(ProcId).out
-error                 = ./logs/digitise.$(ClusterId).$(ProcId).err
-log                   = ./logs/digitise.$(ClusterId).$(ProcId).log
+output                = ./logs/mceb.$(ClusterId).$(ProcId).out
+error                 = ./logs/mceb.$(ClusterId).$(ProcId).err
+log                   = ./logs/mceb.$(ClusterId).$(ProcId).log
 MY.SendCredential = True
 getenv = False
 transfer_output_files = ""

@@ -1,137 +1,290 @@
+# SND@LHC / AdvSND neutrino simulation pipeline — Snakemake + HTCondor
+#
+# Each job index runs independently through all selected stages:
+#   generate_input_file:{i} -> transport_neutrinos:{i} -> digitise:{i} -> analysis:{i}
+#
+# Outputs live on EOS; Snakemake tracks local sentinel (.done) files.
+# Loaded via run_snakemake.py which writes snakemake_production/config.yaml first.
+
 import os
-configfile: "config.yaml"
 
-eos_dir = config["eos_dir"]
-neutrino_pid = config['neutrino_pid']
-target = config['target']
-event_generator_list = config['event_generator_list']
-N = config['N']
-geo_id = config['geo_id']
+# ---------------------------------------------------------------------------
+# Configuration variables (populated from config.yaml by run_snakemake.py)
+# ---------------------------------------------------------------------------
 
+TAG           = config["tag"]
+NEUTRINO      = config["neutrino"]
+TOPVOL        = config["topvol"]
+TOPVOLUME     = "+" + TOPVOL          # GENIE top-volume prefix
+TUNE          = config["tune"]
+NEVENTS       = int(config["nevents"])
+COLNUM        = float(config["colnum"])
+NJOBS         = int(config["njobs"])
+ADVSND        = bool(config["advsnd"])
+FLUX          = config["flukaflux"]
+OUTPUTDIR     = config["outputdir"]
+GEOFILE       = config["geofile"]
+XSEC          = config["xsec"]
+YEAR          = config["year"]
+EVENTGENLIST  = config["eventgenlist"]
+CONDOR_FOLDER = config["condor_folder"]
+SNDSW_DIR     = config["sndsw_dir"]
+EOSSERVER     = "root://eosuser.cern.ch/"
 
+# Events per job (mirrors $INT(NEVENTS)/$INT(NJOBS) in generate_input_file.sub).
+NEVENTS_PER_JOB = NEVENTS // NJOBS if NEVENTS > 0 else 0
 
+# gevgen_fnal mode flag: collision-based (-e) or fixed-events (-n)
+NEVENTS_OR_COLNUM = f"-n {NEVENTS_PER_JOB}" if NEVENTS > 0 else f"-e {COLNUM:.6g}"
 
-# Define the single target path based on your config
+# AdvSND-only: add -z 0 flag to gevgen_fnal
+Z_FLAG = "-z 0" if ADVSND else ""
+
+# ---------------------------------------------------------------------------
+# Deterministic file names (from config.sh)
+# ---------------------------------------------------------------------------
+
+OUTPUTFILE_GEN    = f"sndlhc_{TOPVOLUME}_SND_LHC_{TUNE}.0.ghep.root"
+OUTPUTFILE_GST    = f"sndlhc_{TOPVOLUME}_SND_LHC_{TUNE}.0.gst.root"
+OUTPUTFILE_TRANSP = "sndLHC.Genie-TGeant4.root"
+GEOFILE_GEANT4    = "geofile_full.Genie-TGeant4.root"
+OUTPUTFILE_DIGI   = "sndLHC.Genie-TGeant4_dig_coord.root"
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+
+def eos_jobdir(job_idx):
+    """EOS output directory for a given 1-based job index."""
+    return f"{OUTPUTDIR}/{TAG}/nu{NEUTRINO}/volume_{TOPVOL}/{job_idx}"
+
+# Local sentinel root — one .done file per (stage, job_idx)
+SENTINEL_ROOT = f"{CONDOR_FOLDER}/snakemake_sentinels/{TAG}/nu{NEUTRINO}/volume_{TOPVOL}"
+
+JOB_INDICES = list(range(1, NJOBS + 1))
+
+# ---------------------------------------------------------------------------
+# Environment setup (inlined into each rule's shell block)
+# ---------------------------------------------------------------------------
+
+if ADVSND:
+    ENV_SETUP = (
+        "source /cvmfs/sndlhc.cern.ch/SNDLHC-2024/June25/setUp.sh\n"
+        f'    eval "$(alienv load advsndsw/latest --work-dir {SNDSW_DIR} --no-refresh)"\n'
+        "    SNDSW_ROOT=$ADVSNDSW_ROOT"
+    )
+else:
+    ENV_SETUP = (
+        "source /cvmfs/sndlhc.cern.ch/SNDLHC-2025/Jan30/setUp.sh\n"
+        f'    eval "$(alienv load sndsw/latest --work-dir {SNDSW_DIR} --no-refresh)"'
+    )
+
+# --AdvSND or --year YYYY flag for run_simSND.py
+SIM_FLAG = "--AdvSND" if ADVSND else f"--year {YEAR}"
+
+# Pythia library path needed by transport and digitise steps
+PYTHIA_LIB = (
+    "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"
+    "/cvmfs/sndlhc.cern.ch/SNDLHC-2023/Aug30/sw/slc9_x86-64/pythia/sndsw-pythia8309-local1/lib"
+)
+
+# ---------------------------------------------------------------------------
+# Default target: last stage for all job indices
+# (overridden by run_snakemake.py via explicit targets= list)
+# ---------------------------------------------------------------------------
+
 rule all:
     input:
-        os.path.join(
-            eos_dir,
-            f"sim_{neutrino_pid}_{event_generator_list}_{geo_id}_{N}",
-            "sndLHC.Genie-TGeant4.root"
-        )
+        expand(f"{SENTINEL_ROOT}/digitise/{{job_idx}}.done", job_idx=JOB_INDICES)
 
-rule make_geofile:
-    output:
-        os.path.join(eos_dir, f"geofile.{geo_id}.root")
-    shell:
-        "python $ADVSNDSW_ROOT/shipLHC/makeGeoFile.py -c $ADVSNDSW_ROOT/geometry/AdvSND_geom_config.py -g {output}"
 
-rule convert_geofile:
-    input:
-        os.path.join(eos_dir, f"geofile.{geo_id}.root")
-    output:
-        os.path.join(eos_dir, f"geofile.{geo_id}.gdml")
-    shell:
-        "python gdml_convert.py -i {input} -o {output}"
-
-rule generate_mpl_xml:
-    input:
-        os.path.join(eos_dir, f"geofile.{geo_id}.gdml")
-    output:
-        os.path.join(eos_dir, "mpl.xml")
-    shell:
-        "gmxpl -f {input} -t \"+{target}\" -L \"cm\" -D \"g_cm3\" -o {output} --message-thresholds $GENIE/config/Messenger_laconic.xml"
-
+# ---------------------------------------------------------------------------
+# Stage 1: GENIE input generation
+# ---------------------------------------------------------------------------
 
 rule generate_input_file:
-    input:
-        # your four inputs
-        gdml    = os.path.join(eos_dir, f"geofile.{geo_id}.gdml"),
-        xs      = "/afs/cern.ch/work/d/dannc/public/AdvSND/2024/splines/genie_splines_GENIE_v32_ADVSNDG18_02a_01_000_2_plus2.xml",
-        header  = "/eos/experiment/sndlhc/users/ursovsnd/genie_input/20b_no_bias.gsimple.root",
-        auxxml  = "/afs/cern.ch/work/d/dannc/public/AdvSND/2024/auxiliary/mympl_plus.xml"
-
     output:
-        # f-string injects eos_dir, but {target}, {N}, etc. remain wildcards
-        os.path.join(
-            eos_dir,
-            "sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.ghep.root"
-        )
-
+        sentinel = f"{SENTINEL_ROOT}/generate_input_file/{{job_idx}}.done"
     params:
-        # now that wildcards are defined, strip off the ".ghep.root" suffix to get the GENIE prefix
-        prefix=lambda wildcards, output: output[0][:-len(".0.ghep.root")]
+        eos_dir = lambda wc: eos_jobdir(wc.job_idx),
+        seed    = lambda wc: int(wc.job_idx),
+    shell:
+        # Plain {{VAR}} below become ${VAR} in the bash script (Snakemake escaping).
+        # Plain {CONST} are Python-interpolated by Snakemake before job submission.
+        """
+        set -o errexit -o pipefail
+        EOSSERVER="{EOSSERVER}"
+        OUTPUTDIR="{params.eos_dir}"
+        OUTPUTFILE_GEN="{OUTPUTFILE_GEN}"
+        OUTPUTGST="{OUTPUTFILE_GST}"
 
+        # Idempotency: if EOS output already exists, mark done and exit.
+        if xrdfs $EOSSERVER stat $OUTPUTDIR/$OUTPUTFILE_GEN 2>/dev/null; then
+            echo "[idempotent] $OUTPUTFILE_GEN already on EOS"
+            mkdir -p $(dirname {output.sentinel})
+            touch {output.sentinel}
+            exit 0
+        fi
+
+        {ENV_SETUP}
+        export FAIRSHIP="${{FAIRSHIP_ROOT}}"
+
+        gevgen_fnal -f "{FLUX},,-{NEUTRINO},{NEUTRINO}" \\
+            -g "{GEOFILE}" \\
+            -t "{TOPVOLUME}" \\
+            -L "cm" -D "g_cm3" \\
+            {NEVENTS_OR_COLNUM} \\
+            -o "$(basename $OUTPUTFILE_GEN .0.ghep.root)" \\
+            --tune "{TUNE}" \\
+            --cross-sections "{XSEC}" \\
+            --event-generator-list "{EVENTGENLIST}" \\
+            --message-thresholds "$GENIE/config/Messenger_laconic.xml" \\
+            {Z_FLAG} \\
+            --seed {params.seed}
+
+        gntpc -i $OUTPUTFILE_GEN -f gst -o $OUTPUTGST -c
+        addAuxiliaryToGST $OUTPUTFILE_GEN $OUTPUTGST
+
+        xrdcp *ghep.root $EOSSERVER/$OUTPUTDIR/$OUTPUTFILE_GEN
+        xrdcp *gst.root  $EOSSERVER/$OUTPUTDIR/$OUTPUTGST
+
+        mkdir -p $(dirname {output.sentinel})
+        touch {output.sentinel}
+        """
+
+
+# ---------------------------------------------------------------------------
+# Stage 2: Geant4 transport
+# ---------------------------------------------------------------------------
+
+rule transport_neutrinos:
+    input:
+        sentinel = f"{SENTINEL_ROOT}/generate_input_file/{{job_idx}}.done"
+    output:
+        sentinel = f"{SENTINEL_ROOT}/transport_neutrinos/{{job_idx}}.done"
+    params:
+        eos_dir = lambda wc: eos_jobdir(wc.job_idx),
     shell:
         """
-        gevgen_fnal \
-          -f "{input.header},,-{wildcards.neutrino_pid},{wildcards.neutrino_pid}" \
-          -g {input.gdml} \
-          -t "+{wildcards.target}" \
-          -L cm -D g_cm3 \
-          -n {wildcards.N} \
-          -o {params.prefix} \
-          --tune SNDG18_02a_01_000 \
-          --cross-sections {input.xs} \
-          --message-thresholds $GENIE/config/Messenger_laconic.xml -z -3 \
-          --event-generator-list {wildcards.event_generator_list} \
-          -m {input.auxxml}
+        set -o errexit -o pipefail
+        {PYTHIA_LIB}
+        EOSSERVER="{EOSSERVER}"
+        OUTPUTDIR="{params.eos_dir}"
+        INPUT="{OUTPUTFILE_GST}"
+
+        # Idempotency check
+        if xrdfs $EOSSERVER stat $OUTPUTDIR/{OUTPUTFILE_TRANSP} 2>/dev/null; then
+            echo "[idempotent] {OUTPUTFILE_TRANSP} already on EOS"
+            mkdir -p $(dirname {output.sentinel})
+            touch {output.sentinel}
+            exit 0
+        fi
+
+        {ENV_SETUP}
+
+        xrdcp $EOSSERVER/$OUTPUTDIR/$INPUT ./$INPUT
+
+        if [[ ! -f "$INPUT" ]]; then
+            echo "ERROR: $INPUT not found after xrdcp" >&2; exit 1
+        fi
+
+        # Count entries in the gst tree via ROOT Python bindings (avoids heredoc escaping).
+        N=$(python3 -c "import ROOT; f=ROOT.TFile.Open('$INPUT'); print(int(f.Get('gst').GetEntries()))")
+        if ! [[ $N =~ ^[0-9]+$ ]]; then
+            echo "ERROR: could not extract a valid entry count (got: '$N')" >&2; exit 1
+        fi
+        echo "Found $N events in gst -> running simulation with -n $N"
+
+        python "$SNDSW_ROOT/shipLHC/run_simSND.py" \\
+            --Genie 4 -f "$INPUT" --nEvents "$N" {SIM_FLAG}
+
+        xrdcp {OUTPUTFILE_TRANSP} $EOSSERVER/$OUTPUTDIR/{OUTPUTFILE_TRANSP}
+        xrdcp {GEOFILE_GEANT4}    $EOSSERVER/$OUTPUTDIR/{GEOFILE_GEANT4}
+
+        mkdir -p $(dirname {output.sentinel})
+        touch {output.sentinel}
         """
 
-rule convert_ghep_gst:
-    input:
-        os.path.join(
-            eos_dir,
-            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.ghep.root"
-        )
-    output:
-        os.path.join(
-            eos_dir,
-            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.gst.root"
-        )
-    log:
-        os.path.join(
-            eos_dir,
-            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.gst.log"
-        )
-    shell:
-        "gntpc -i {input} -f gst -o {output} -c"
 
-rule add_auxiliary_to_gst:
-    input:
-        gst=os.path.join(
-            eos_dir,
-            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.gst.root"
-        ),
-        ghep=os.path.join(
-            eos_dir,
-            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0.ghep.root"
-        )
-    output:
-        os.path.join(
-            eos_dir,
-            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0_aux.gst.root"
-        )
-    log:
-        os.path.join(
-            eos_dir,
-            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0_aux.gst.log"
-        )
-    shell:
-        "cp {input.gst} {output} && addAuxiliaryToGST {input.ghep} {input.gst}"
+# ---------------------------------------------------------------------------
+# Stage 3: Digitisation
+# ---------------------------------------------------------------------------
 
-rule run_sim:
+rule digitise:
     input:
-        os.path.join(
-            eos_dir,
-            f"sndlhc_+{target}_{N}_{neutrino_pid}_{event_generator_list}_ADVSNDG18_02a_01_000.0_aux.gst.root"
-        )
+        sentinel = f"{SENTINEL_ROOT}/transport_neutrinos/{{job_idx}}.done"
     output:
-        os.path.join(
-            eos_dir,
-            f"sim_{neutrino_pid}_{event_generator_list}_{geo_id}_{N}",
-            "sndLHC.Genie-TGeant4.root"
-        )
+        sentinel = f"{SENTINEL_ROOT}/digitise/{{job_idx}}.done"
+    params:
+        eos_dir = lambda wc: eos_jobdir(wc.job_idx),
     shell:
-        "python $ADVSNDSW_ROOT/shipLHC/run_simSND.py --Genie 4 -f {input} --AdvSND -n {N} -o {output}"
+        """
+        set -o errexit -o pipefail
+        {PYTHIA_LIB}
+        EOSSERVER="{EOSSERVER}"
+        OUTPUTDIR="{params.eos_dir}"
+        INPUTFILE="{OUTPUTFILE_TRANSP}"
+        GEOFILE_G4="{GEOFILE_GEANT4}"
+        OUTPUTFILE="{OUTPUTFILE_DIGI}"
 
+        # Idempotency check
+        if xrdfs $EOSSERVER stat $OUTPUTDIR/$OUTPUTFILE 2>/dev/null; then
+            echo "[idempotent] $OUTPUTFILE already on EOS"
+            mkdir -p $(dirname {output.sentinel})
+            touch {output.sentinel}
+            exit 0
+        fi
+
+        {ENV_SETUP}
+
+        xrdcp $EOSSERVER/$OUTPUTDIR/$INPUTFILE  ./$INPUTFILE
+        xrdcp $EOSSERVER/$OUTPUTDIR/$GEOFILE_G4 ./$GEOFILE_G4
+
+        # Digitisation can exit non-zero for known non-fatal reasons; continue anyway.
+        set +o errexit
+        python "$SNDSW_ROOT/shipLHC/run_digiSND.py" -f "$INPUTFILE" -g "$GEOFILE_G4" -cpp \\
+            || echo "digi step exited non-zero, continuing..."
+        set -o errexit
+
+        # Rename the digitised output (${{INPUTFILE%.root}} strips .root suffix).
+        DIGCPP="${{INPUTFILE%.root}}_digCPP.root"
+        mv "$DIGCPP" "$OUTPUTFILE"
+
+        xrdcp $OUTPUTFILE $EOSSERVER/$OUTPUTDIR/$OUTPUTFILE
+
+        mkdir -p $(dirname {output.sentinel})
+        touch {output.sentinel}
+        """
+
+
+# ---------------------------------------------------------------------------
+# Stage 4: Analysis / image creation
+# ---------------------------------------------------------------------------
+
+rule analysis:
+    input:
+        sentinel = f"{SENTINEL_ROOT}/digitise/{{job_idx}}.done"
+    output:
+        sentinel = f"{SENTINEL_ROOT}/analysis/{{job_idx}}.done"
+    params:
+        eos_dir = lambda wc: eos_jobdir(wc.job_idx),
+    shell:
+        """
+        set -o errexit -o pipefail
+        {PYTHIA_LIB}
+        EOSSERVER="{EOSSERVER}"
+        OUTPUTDIR="{params.eos_dir}"
+        DIGI="{OUTPUTFILE_DIGI}"
+
+        {ENV_SETUP}
+
+        xrdcp $EOSSERVER/$OUTPUTDIR/$DIGI ./$DIGI
+
+        python "{CONDOR_FOLDER}/image_creator_no_exc_upd.py" \\
+            -j 4 --inputfiles $DIGI -o image.root
+
+        cp image.root $OUTPUTDIR/image.root
+
+        mkdir -p $(dirname {output.sentinel})
+        touch {output.sentinel}
+        """

@@ -15,8 +15,15 @@ SEED=$LSB_JOBINDEX
 set -x
 
 if xrdfs $EOSSERVER stat $OUTPUTDIR/$OUTPUTFILE_GEN; then
-	echo "Target exists, nothing to do."
-	exit 0
+	if [ "${RESIMULATE:-False}" = "True" ]; then
+		echo "WARNING: output $OUTPUTDIR/$OUTPUTFILE_GEN already exists — deleting for resimulation."
+		xrdfs $EOSSERVER rm $OUTPUTDIR/$OUTPUTFILE_GEN
+		OUTPUTGST_CHECK=$(basename $OUTPUTFILE_GEN .ghep.root).gst.root
+		xrdfs $EOSSERVER stat $OUTPUTDIR/$OUTPUTGST_CHECK && xrdfs $EOSSERVER rm $OUTPUTDIR/$OUTPUTGST_CHECK || true
+	else
+		echo "Target exists, nothing to do."
+		exit 0
+	fi
 fi
 
 

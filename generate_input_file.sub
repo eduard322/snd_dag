@@ -3,11 +3,11 @@ executable            = generate_input_file.sh
 #NJOBS = 1000
 NEVENTSPERJOB = $INT(NEVENTS) / $INT(NJOBS)
 #arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR)
-arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR) $(GEOFILE) $(XSEC) $(SNDSW_DIR) $(ADVSND)
+arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR) $(GEOFILE) $(XSEC) $(SNDSW_DIR) $(ADVSND) $(RESIMULATE)
 #output                = ./logs/generate_input_file.$(ClusterId).$(ProcId).out
 output                 = /dev/null
-error                 = ./logs/generate_input_file.$(ClusterId).$(ProcId).err
-log                   = ./logs/generate_input_file.$(ClusterId).$(ProcId).log
+error                 = ./logs/generate_input_file.$(ClusterId).err
+log                   = ./logs/generate_input_file.$(ClusterId).log
 
 # ----- automatic retry logic -----
 # Consider exit‑code 0 a success…

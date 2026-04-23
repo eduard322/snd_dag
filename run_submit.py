@@ -161,8 +161,12 @@ def parse_args(argv=None) -> argparse.Namespace:
         help="enable advsnd simulation",
     )
     parser.add_argument("--flow", type=str, nargs='+', default="standard", help = "specify the processes to launch: --flow generate_input transport_neutrinos digitize")
-
-
+    parser.add_argument(
+        "--resimulate",
+        action="store_true",
+        default=yget("resimulate", False),
+        help="Delete existing output files on EOS and re-run jobs instead of skipping them.",
+    )
 
     return parser.parse_args(remaining)
 
@@ -185,6 +189,7 @@ def build_vars_from_args(args: argparse.Namespace) -> dict:
         "GEOFILE": str(args.geofile),
         "XSEC": str(args.xsec),
         "FLOW": args.flow,
+        "RESIMULATE": str(args.resimulate),
     }
     return VARS
 
@@ -242,7 +247,7 @@ def write_readme(vars_dict: dict) -> None:
     )
 
     print(readme_content)
-    readme_path = out_dir / "README.md"
+    readme_path = out_dir / "README_eduard.md"
     with open(readme_path, "w") as f:
         f.write(readme_content)
 
@@ -319,19 +324,17 @@ dag_dir.mkdir(parents=True, exist_ok=True)
 # sub_transport = base / "transport_neutrinos.sub"
 # sub_digitise  = base / "digitise.sub"
 
-# One logical node per layer (vars is a list; one dict == one underlying node)
-node_vars = [VARS]
-
-
-if VARS["FLOW"] == "all":
-    scripts_to_execute = ["generate_input_file", "transport_neutrinos", "digitise", "analysis"]
-elif VARS["FLOW"] == "standard":
+_flow = VARS["FLOW"]
+flow_key = _flow[0] if isinstance(_flow, list) and len(_flow) == 1 else _flow
+if flow_key == "all":
+    scripts_to_execute = ["generate_input_file", "transport_neutrinos", "mceb", "digitise", "analysis"]
+elif flow_key == "standard":
     scripts_to_execute = ["generate_input_file", "transport_neutrinos", "digitise"]
 else:
-    scripts_to_execute = VARS["FLOW"]
+    scripts_to_execute = _flow if isinstance(_flow, list) else [_flow]
 
 print(f"launching {scripts_to_execute}...")
-# One logical node per layer in your example
+# One logical node per layer (vars is a list; one dict == one underlying node)
 node_vars = [VARS]
 
 dag, dag_file = build_linear_layers_dag(
@@ -347,8 +350,6 @@ dag, dag_file = build_linear_layers_dag(
 
 
 #print(dag.describe())
-
-dag_file = dags.write_dag(dag, dag_dir=dag_dir, dag_file_name=DAG_NAME)
 
 # Change cwd BEFORE building the Submit from the DAG (mimics condor_submit_dag)
 os.chdir(dag_dir)

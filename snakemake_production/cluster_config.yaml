@@ -1,0 +1,29 @@
+# Per-rule HTCondor resource settings.
+# Values are substituted into the --cluster command string as {cluster.KEY}.
+
+__default__:
+  accounting_group: "group_u_SNDLHC.users"
+  max_retries: 3
+  requirements: ""
+  job_flavour: "tomorrow"
+  request_cpus: 1
+
+generate_input_file:
+  job_flavour: "tomorrow"
+  requirements: ""
+  request_cpus: 1
+
+transport_neutrinos:
+  job_flavour: "tomorrow"
+  requirements: "(OpSysAndVer =?= \"AlmaLinux9\")"
+  request_cpus: 1
+
+digitise:
+  job_flavour: "longlunch"
+  requirements: "(OpSysAndVer =?= \"AlmaLinux9\")"
+  request_cpus: 1
+
+analysis:
+  job_flavour: "longlunch"
+  requirements: "(OpSysAndVer =?= \"AlmaLinux9\")"
+  request_cpus: 1
