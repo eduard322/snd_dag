@@ -351,7 +351,7 @@ if args.one_to_one:
     njobs = int(VARS["NJOBS"])
     node_vars = [{**VARS, "JOBINDEX": str(i), "NJOBS_SUBMIT": "1"} for i in range(njobs)]
 else:
-    node_vars = [VARS]
+    node_vars = [{**VARS, "NJOBS_SUBMIT": VARS["NJOBS"]}]
 
 dag, dag_file = build_linear_layers_dag(
     base=base,

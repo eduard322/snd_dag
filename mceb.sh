@@ -3,7 +3,7 @@ set -o errexit -o pipefail -o noclobber
 
 # Set up SND environment
 
-source $8/config.sh "$@"
+source "$CONDOR_FOLDER/config.sh"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/cvmfs/sndlhc.cern.ch/SNDLHC-2023/Aug30//sw//slc9_x86-64/pythia/sndsw-pythia8309-local1/lib
 set -o nounset
 

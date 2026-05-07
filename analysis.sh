@@ -3,16 +3,12 @@ set -o errexit -o pipefail -o noclobber
 
 # Set up SND environment
 
-source $8/config.sh "$@"
+source "$CONDOR_FOLDER/config.sh"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/cvmfs/sndlhc.cern.ch/SNDLHC-2023/Aug30//sw//slc9_x86-64/pythia/sndsw-pythia8309-local1/lib
 set -o nounset
 
 INPUTFILE=$INPUTFILE_DIGI
 GEOFILE=$GEOFILE_GEANT4
-#OUTPUTFILE=$(basename $INPUTFILE .root)_dig.root
-
-ProcId=$1
-LSB_JOBINDEX=$((ProcId+1))
 
 
 
@@ -26,7 +22,7 @@ set -x
 xrdcp $EOSSERVER/$OUTPUTDIR/$OUTPUTFILE_DIGI ./$OUTPUTFILE_DIGI
 
 
-python $8/image_creator_no_exc_upd.py -j 4 --inputfiles $OUTPUTFILE_DIGI -o image.root
+python "$CONDOR_FOLDER/image_creator_no_exc_upd.py" -j 4 --inputfiles $OUTPUTFILE_DIGI -o image.root
 
 #python $8/image_creator.py -j 4 --inputfiles $OUTPUTFILE_DIGI -o image_muonic.root --muonic
 #python $8/image_creator.py -j 4 --inputfiles $OUTPUTFILE_DIGI -o image_nonmuonic.root

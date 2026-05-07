@@ -1,8 +1,6 @@
 executable            = mceb.sh
 #NJOBS = 1000
 NEVENTSPERJOB = $INT(NEVENTS) / $INT(NJOBS)
-JOBINDEX   = $(ProcId)
-NJOBS_SUBMIT = $(NJOBS)
 # ----- automatic retry logic -----
 # Consider exit‑code 0 a success…
 success_exit_code = 0
@@ -12,7 +10,7 @@ max_retries       = 3
 # retry_until      = !member(ExitCode,{2,13,42})
 # ---------------------------------
 
-arguments             = $(JOBINDEX) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR) $(GEOFILE) $(XSEC) $(SNDSW_DIR) $(ADVSND) $(RESIMULATE)
+environment           = "JOBINDEX=$(JOBINDEX:$(ProcId)) NEVENTS_PER_JOB=$INT(NEVENTSPERJOB) COLNUM=$(COLNUM) TOPVOL=$(TOPVOL) NEUTRINO=$(NEUTRINO) EVENTGENLIST=$(EVENTGENLIST) TAG=$(TAG) CONDOR_FOLDER=$(CONDOR_FOLDER) YEAR=$(YEAR) TUNE=$(TUNE) FLUKAFLUX=$(FLUKAFLUX) OUTPUTDIR=$(OUTPUTDIR) GEOFILE=$(GEOFILE) XSEC=$(XSEC) SNDSW_DIR=$(SNDSW_DIR) ADVSND=$(ADVSND) RESIMULATE=$(RESIMULATE)"
 
 output                = ./logs/mceb.$(ClusterId).out
 error                 = ./logs/mceb.$(ClusterId).err

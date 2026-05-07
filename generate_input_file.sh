@@ -3,12 +3,9 @@ set -o errexit -o pipefail -o noclobber
 
 # Set up SND environment
 
-source $8/config.sh "$@"
+source "$CONDOR_FOLDER/config.sh"
 set -o nounset
 
-
-ProcId=$1
-LSB_JOBINDEX=$((ProcId+1))
 SEED=$LSB_JOBINDEX
 
 
@@ -75,7 +72,7 @@ echo $SNDSW_ROOT
 # fi
 
 Z_FLAG=""
-if [ "${16}" = "True" ]; then
+if [ "$ADVSND" = "True" ]; then
   Z_FLAG="-z 0"
 fi
 

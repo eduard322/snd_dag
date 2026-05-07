@@ -2,10 +2,7 @@ executable            = generate_input_file.sh
 #NEVENTS = 500000
 #NJOBS = 1000
 NEVENTSPERJOB = $INT(NEVENTS) / $INT(NJOBS)
-JOBINDEX   = $(ProcId)
-NJOBS_SUBMIT = $(NJOBS)
-#arguments             = $(JOBINDEX) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR)
-arguments             = $(JOBINDEX) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR) $(GEOFILE) $(XSEC) $(SNDSW_DIR) $(ADVSND) $(RESIMULATE)
+environment           = "JOBINDEX=$(JOBINDEX:$(ProcId)) NEVENTS_PER_JOB=$INT(NEVENTSPERJOB) COLNUM=$(COLNUM) TOPVOL=$(TOPVOL) NEUTRINO=$(NEUTRINO) EVENTGENLIST=$(EVENTGENLIST) TAG=$(TAG) CONDOR_FOLDER=$(CONDOR_FOLDER) YEAR=$(YEAR) TUNE=$(TUNE) FLUKAFLUX=$(FLUKAFLUX) OUTPUTDIR=$(OUTPUTDIR) GEOFILE=$(GEOFILE) XSEC=$(XSEC) SNDSW_DIR=$(SNDSW_DIR) ADVSND=$(ADVSND) RESIMULATE=$(RESIMULATE)"
 #output                = ./logs/generate_input_file.$(ClusterId).$(ProcId).out
 output                 = /dev/null
 error                 = ./logs/generate_input_file.$(ClusterId).err
