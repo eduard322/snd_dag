@@ -1,6 +1,8 @@
 executable            = analysis.sh
 #NJOBS = 1000
 NEVENTSPERJOB = $INT(NEVENTS) / $INT(NJOBS)
+JOBINDEX   = $(ProcId)
+NJOBS_SUBMIT = $(NJOBS)
 # ----- automatic retry logic -----
 # Consider exit‑code 0 a success…
 success_exit_code = 0
@@ -10,7 +12,7 @@ max_retries       = 3
 # retry_until      = !member(ExitCode,{2,13,42})
 # ---------------------------------
 
-arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR) $(GEOFILE) $(XSEC) $(SNDSW_DIR) $(ADVSND)
+arguments             = $(JOBINDEX) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR) $(GEOFILE) $(XSEC) $(SNDSW_DIR) $(ADVSND)
 
 output                = ./logs/analysis.$(ClusterId).$(ProcId).out
 error                 = ./logs/analysis.$(ClusterId).$(ProcId).err
@@ -22,4 +24,4 @@ notification = Never
 RequestCpus = 1
 requirements = (OpSysAndVer =?= "AlmaLinux9")
 +JobFlavour             ="longlunch"
-queue $(NJOBS)
+queue $(NJOBS_SUBMIT)

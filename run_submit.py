@@ -20,6 +20,7 @@ if not sndsw_dir:  # None or empty string
     raise RuntimeError(
         "Environment variable SNDSW_DIR is not set or empty. "
         "Please source the SND@LHC environment before running this script."
+        "Please enter the correct paths to the system_config.sh and launch it."
     )
 condor_dir = os.getenv("CONDOR_FOLDER")
 if not condor_dir:  # None or empty string
@@ -167,6 +168,12 @@ def parse_args(argv=None) -> argparse.Namespace:
         default=yget("resimulate", False),
         help="Delete existing output files on EOS and re-run jobs instead of skipping them.",
     )
+    parser.add_argument(
+        "--one_to_one",
+        action="store_true",
+        default=yget("one_to_one", False),
+        help="One-to-one DAG: child job i starts as soon as parent job i finishes.",
+    )
 
     return parser.parse_args(remaining)
 
@@ -260,9 +267,12 @@ def build_linear_layers_dag(
     node_vars: list[dict],
     dot_path: Path,
     pre_skip_code: int,
+    one_to_one: bool = False,
 ):
     dot_cfg = dags.DotConfig(path=dot_path, update=True)
     dag = dags.DAG(dot_config=dot_cfg)
+
+    edge = dags.OneToOne() if one_to_one else None
 
     prev = None
     for stage in scripts_to_execute:
@@ -278,6 +288,7 @@ def build_linear_layers_dag(
             )
         else:
             prev = prev.child_layer(
+                edge=edge,
                 name=stage,
                 submit_description=sub_file,
                 vars=node_vars,
@@ -313,7 +324,7 @@ DOT_PATH = "dag.dot"
 base = Path(VARS["CONDOR_FOLDER"]).resolve()
 tag_suffix = VARS["TAG"].split("/")[-1]
 neutrino = VARS["NEUTRINO"]
-dag_dir = base / f"dag_{tag_suffix}" / f"nu{neutrino}" / VARS["TOPVOL"]
+dag_dir = base / "dagman_instructions" / f"dag_{tag_suffix}" / f"nu{neutrino}" / VARS["TOPVOL"]
 
 # CLEAN first, then recreate dag_dir
 shutil.rmtree(dag_dir, ignore_errors=True)
@@ -334,8 +345,13 @@ else:
     scripts_to_execute = _flow if isinstance(_flow, list) else [_flow]
 
 print(f"launching {scripts_to_execute}...")
-# One logical node per layer (vars is a list; one dict == one underlying node)
-node_vars = [VARS]
+# Build node_vars: one-to-one mode creates N separate DAG nodes (one per job),
+# many-to-many mode uses a single node that queues NJOBS procs internally.
+if args.one_to_one:
+    njobs = int(VARS["NJOBS"])
+    node_vars = [{**VARS, "JOBINDEX": str(i), "NJOBS_SUBMIT": "1"} for i in range(njobs)]
+else:
+    node_vars = [VARS]
 
 dag, dag_file = build_linear_layers_dag(
     base=base,
@@ -345,6 +361,7 @@ dag, dag_file = build_linear_layers_dag(
     node_vars=node_vars,
     dot_path=DOT_PATH,
     pre_skip_code=PRE_SKIP_CODE,
+    one_to_one=args.one_to_one,
 )
 
 

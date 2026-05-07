@@ -6,12 +6,14 @@ if [ "${16}" = "True" ]; then
   ADV_VARIABLE="adv"
   #source /cvmfs/sndlhc.cern.ch/SNDLHC-2024/Jan30/setUp.sh
   source /cvmfs/sndlhc.cern.ch/SNDLHC-2024/June25/setUp.sh
-  source "$8"/start_advsnd.sh
+  # source "$8"/start_advsnd.sh
+  eval "$(alienv load ${ADV_VARIABLE}sndsw/latest --work-dir "${15}" --no-refresh)"
 else
   #source /cvmfs/sndlhc.cern.ch/SNDLHC-2024/June25/setUp.sh
   #source /cvmfs/sndlhc.cern.ch/SNDLHC-2025/Jan30/setUp.sh
   source /cvmfs/sndlhc.cern.ch/SNDLHC-2025/Nov24/setUp.sh
-  source "$8"/start_ali.sh
+  eval "$(alienv load ${ADV_VARIABLE}sndsw/latest --work-dir "${15}" --no-refresh)"
+  # source "$8"/start_ali.sh
 fi
 
 #eval "$(alienv load ${ADV_VARIABLE}sndsw/latest --work-dir "${15}" --no-refresh)"

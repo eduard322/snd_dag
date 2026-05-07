@@ -2,8 +2,10 @@ executable            = generate_input_file.sh
 #NEVENTS = 500000
 #NJOBS = 1000
 NEVENTSPERJOB = $INT(NEVENTS) / $INT(NJOBS)
-#arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR)
-arguments             = $(ProcId) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR) $(GEOFILE) $(XSEC) $(SNDSW_DIR) $(ADVSND) $(RESIMULATE)
+JOBINDEX   = $(ProcId)
+NJOBS_SUBMIT = $(NJOBS)
+#arguments             = $(JOBINDEX) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR)
+arguments             = $(JOBINDEX) $INT(NEVENTSPERJOB) $(COLNUM) $(TOPVOL) $(NEUTRINO) $(EVENTGENLIST) $(TAG) $(CONDOR_FOLDER) $(YEAR) $(TUNE) $(FLUKAFLUX) $(OUTPUTDIR) $(GEOFILE) $(XSEC) $(SNDSW_DIR) $(ADVSND) $(RESIMULATE)
 #output                = ./logs/generate_input_file.$(ClusterId).$(ProcId).out
 output                 = /dev/null
 error                 = ./logs/generate_input_file.$(ClusterId).err
@@ -31,4 +33,4 @@ RequestCpus = 1
 +JobFlavour = "tomorrow"
 #+AccountingGroup = "group_u_SNDLHC.users"
 +AccountingGroup = "group_u_SNDLHC.users"
-queue $(NJOBS)
+queue $(NJOBS_SUBMIT)
